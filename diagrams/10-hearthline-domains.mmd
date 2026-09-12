@@ -1,0 +1,22 @@
+flowchart TB
+    subgraph Property["Property Domain"]
+        P_API["index.ts (public API)"]
+        P_Int["property-service.ts<br/>unit-service.ts"]
+    end
+    subgraph Leasing["Leasing Domain"]
+        L_API["index.ts (public API)"]
+        L_Int["lease-service.ts<br/>renewal.ts<br/>screening-service.ts"]
+    end
+    subgraph Operations["Operations Domain"]
+        O_API["index.ts (public API)"]
+        O_Int["work-order-service.ts<br/>vendor-service.ts"]
+    end
+    subgraph Payments["Payments Domain"]
+        PM_API["index.ts (public API)"]
+        PM_Int["payment-service.ts<br/>refund-service.ts<br/>queries.ts<br/>bucketing.ts<br/>export.ts"]
+    end
+    L_API -->|reads units| P_API
+    PM_API -->|reads leases| L_API
+    O_API -->|reads units| P_API
+    O_API -->|reads leases| L_API
+    PM_API -.->|"NEVER imports internal files"| P_Int

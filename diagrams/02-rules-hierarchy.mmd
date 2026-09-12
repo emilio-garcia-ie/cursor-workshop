@@ -1,0 +1,8 @@
+flowchart TB
+    U["User Rules<br/>(personal, every project)"] --> S["Session"]
+    R[".cursor/rules/*.mdc<br/>(project, shared via git)"] --> S
+    G["AGENTS.md<br/>(simple alternative)"] --> S
+    R --> R1["Always Apply"]
+    R --> R2["Apply Intelligently"]
+    R --> R3["Apply to Specific Files (globs)"]
+    R --> R4["Apply Manually (@-mention)"]

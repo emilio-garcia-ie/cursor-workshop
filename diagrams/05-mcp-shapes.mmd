@@ -1,0 +1,10 @@
+flowchart TB
+    subgraph Local["Local servers"]
+        L["stdio: command + args<br/>e.g. Playwright"]
+    end
+    subgraph Remote["Remote servers"]
+        R["url + headers/token<br/>e.g. GitHub"]
+    end
+    L --> C[".cursor/mcp.json<br/>(mcpServers)"]
+    R --> C
+    C --> A["Agent tools"]
