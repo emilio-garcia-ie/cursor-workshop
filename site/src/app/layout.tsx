@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 import Disclaimer from "@/components/Disclaimer";
 
@@ -19,13 +20,13 @@ export default function RootLayout({
         <header>
           <Disclaimer />
           <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-            <a href="/" className="font-serif text-lg font-bold">
+            <Link href="/" className="font-serif text-lg font-bold">
               Hearthline <span style={{ color: "var(--cursor-orange)" }}>Cursor</span> Workshop
-            </a>
+            </Link>
             <div className="flex gap-4 text-sm">
-              <a className="underline" href="/steps">Steps</a>
-              <a className="underline" href="/glossary">Glossary</a>
-              <a className="underline" href="/bibliography">Bibliography</a>
+              <Link className="underline" href="/steps">Steps</Link>
+              <Link className="underline" href="/glossary">Glossary</Link>
+              <Link className="underline" href="/bibliography">Bibliography</Link>
             </div>
           </nav>
         </header>

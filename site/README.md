@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hearthline workshop site
 
-## Getting Started
+Next.js 16 site for the cursor-workshop curriculum (`../steps/*.md`). Step pages are prerendered; the filtered home page is dynamic. Run with a Next.js server, not an assumed static export.
 
-First, run the development server:
+## Commands
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- `npm run dev` — local dev server
+- `npm run build` / `npm start` — production build and serve
+- `npm run test` — Vitest unit contracts (tab splitting, progress model, track filters)
+- `npm run test:browser` — Playwright check (migration → recovery → export/import → Resume). Uses the installed Google Chrome binary; no browser download. Set `QA_PRODUCTION=1` to run against `next start` instead of dev; set `QA_SCREENSHOT_DIR` to save 390px/1440px screenshots.
+- `npm run lint`, `npm run typecheck` — gate scripts
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Progress storage (v2)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Storage keys: `hearthline-progress-v2` (current), `hearthline-progress-v1` (legacy backup, read-only).
+- Schema: `{ version: 2, steps: { [slug]: { sections: { [sectionId]: { completed, revision, needsReview? } }, complete?, outcome?, legacy? } }, lastVisited?: { slug, section } }`.
+- Migration: on first load, valid v1 `{ complete?, outcome? }` flags are copied into `legacy` per step; the v1 key is retained as a backup and never deleted by the site. Malformed, oversized, or invalid v1 data is rejected without writing v2; nothing is inferred as section completions.
+- Completion is an explicit self-report per section or per whole step. Viewing a tab records only `lastVisited`; it never marks content complete. Points are counted once per step; legacy aggregate flags count as completion but do not mark sections learned.
+- Content revisions (section removal/rename): persisted progress for retired section IDs is reconciled against a published-history table, kept as `needsReview` history and never inferred as completion of a new section; obsolete `lastVisited` targets fall back to the first unfinished section. Strict imports use the same reconciliation so a legitimate older backup still imports, while fabricated unknown sections/fields remain rejected.
+- Import accepts versioned JSON only (`version: 2`), strict-shaped, at most 1 MB by UTF-8 byte length, with unknown slugs/sections/fields rejected before any state change. Importing requires an explicit confirmation; a failed write rolls back.
+- If stored v2 data becomes unreadable, the UI keeps the last valid snapshot, states that empty display is not a backup, and offers a raw recovery download of the exact original bytes; with no valid snapshot, the snapshot-export button is disabled.
+- Progress is local-only: no accounts, backend, or telemetry, and it is not proof of learning or mastery.
+- Same-browser/profile/origin resume is the Phase-2 MVP scope. Export JSON before clearing browser storage or moving to another origin; import it manually to restore compatible progress.
+- Reconsider account-based sync only after demonstrated cross-device needs and explicit cost/privacy approval. Across-session return rates alone do not establish cross-device demand; no telemetry is collected in Phase 2.
