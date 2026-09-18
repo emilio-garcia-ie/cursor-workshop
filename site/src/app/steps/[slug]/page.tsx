@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getStep, getSteps } from "@/lib/curriculum";
+import { getStep, getSteps, getProgressCatalog } from "@/lib/curriculum";
+import { splitStepTabs } from "@/lib/tabs";
+import StepTabs from "@/components/StepTabs";
+import ProgressTools from "@/components/ProgressTools";
+import { ProgressProvider } from "@/components/ProgressProvider";
 import { linkCitations, referencedDiagrams } from "@/lib/citations";
 import { mdComponents } from "@/components/md";
 import StepProgress from "@/components/StepProgress";
@@ -10,8 +14,13 @@ export function generateStaticParams() {
   return getSteps().map((s) => ({ slug: s.slug }));
 }
 
-export default function StepPage({ params }: { params: { slug: string } }) {
-  const step = getStep(params.slug);
+export default async function StepPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const step = getStep(slug);
   if (!step) notFound();
   const diagrams = referencedDiagrams(step.body);
 
@@ -23,10 +32,15 @@ export default function StepPage({ params }: { params: { slug: string } }) {
       <h1 className="mt-2 font-serif text-4xl">
         Step {step.step} — {step.title}
       </h1>
-      <StepProgress slug={step.slug} />
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-        {linkCitations(step.body)}
-      </ReactMarkdown>
+      <ProgressProvider catalog={getProgressCatalog()}>
+        <StepTabs key={step.slug} slug={step.slug} tabs={splitStepTabs(step.body).map(tab => ({
+          id: tab.id,
+          label: tab.label,
+          content: <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{linkCitations(tab.body)}</ReactMarkdown>,
+        }))} />
+        <StepProgress slug={step.slug} />
+        <ProgressTools />
+      </ProgressProvider>
       {diagrams.length > 0 && (
         <section className="mt-6">
           <h2 className="font-serif text-2xl">Diagrams</h2>

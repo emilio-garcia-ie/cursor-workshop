@@ -1,4 +1,7 @@
-import { getSteps } from "@/lib/curriculum";
+import { getSteps, getProgressCatalog } from "@/lib/curriculum";
+import { ProgressProvider } from "@/components/ProgressProvider";
+import ProgressSummary from "@/components/ProgressSummary";
+import ProgressTools from "@/components/ProgressTools";
 import {
   PERSONAS,
   PERSONA_STEPS,
@@ -26,13 +29,16 @@ function href(version: string, persona: string): string {
   return s ? `/?${s}` : "/";
 }
 
-export default function Home({
+export default async function Home({
   searchParams,
 }: {
-  searchParams?: { version?: string; persona?: string };
+  searchParams: Promise<{ version?: string; persona?: string }>;
 }) {
-  const version = (searchParams?.version ?? "long") as Version;
-  const persona = (searchParams?.persona ?? "all") as Persona | "all";
+  const { version: rv, persona: rp } = await searchParams;
+  const requestedVersion = rv as Version;
+  const requestedPersona = rp as Persona;
+  const version: Version = VERSIONS.includes(requestedVersion) ? requestedVersion : "long";
+  const persona: Persona | "all" = PERSONAS.includes(requestedPersona) ? requestedPersona : "all";
   const allowed = stepsFor(VERSIONS.includes(version) ? version : "long");
   const emphasis =
     persona !== "all" && (PERSONAS as readonly string[]).includes(persona)
@@ -44,6 +50,7 @@ export default function Home({
       (!allowed || allowed.includes(s.step)) &&
       (!emphasis || emphasis.includes(s.step))
   );
+  const slugs = steps.map(s => s.slug);
   const total = steps.reduce((s, x) => s + x.points, 0);
 
   return (
@@ -81,6 +88,10 @@ export default function Home({
         {steps.length} steps · {total} points · {version}
         {persona !== "all" ? ` · ${persona}` : ""}.
       </p>
+      <ProgressProvider catalog={getProgressCatalog()}>
+        <ProgressSummary selectedSlugs={slugs} />
+        <ProgressTools />
+      </ProgressProvider>
       <ol className="mt-4 space-y-2">
         {steps.map((s) => (
           <li

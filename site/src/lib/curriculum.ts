@@ -1,5 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
+import { splitStepTabs } from "./tabs";
+import type { Catalog } from "./progress";
 
 export interface StepMeta {
   slug: string;
@@ -49,6 +52,19 @@ export function getSteps(): StepMeta[] {
       };
     })
     .sort((a, b) => a.step - b.step);
+}
+
+export function getProgressCatalog(steps = getSteps()): Catalog {
+  return steps.map(step => ({
+    slug: step.slug,
+    step: step.step,
+    points: step.points,
+    sections: splitStepTabs(step.body).map(tab => ({
+      id: tab.id,
+      label: tab.label,
+      revision: createHash("sha256").update(tab.body).digest("hex").slice(0, 16),
+    })),
+  }));
 }
 
 export function getStep(slug: string): StepMeta | undefined {

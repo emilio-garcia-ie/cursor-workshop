@@ -1,4 +1,5 @@
 import type { Components } from "react-markdown";
+import CopyCode from "./CopyCode";
 
 /** Shared markdown rendering: superscript citations, code blocks, tables. */
 export const mdComponents: Components = {
@@ -34,9 +35,5 @@ export const mdComponents: Components = {
       {children}
     </code>
   ),
-  pre: ({ children }) => (
-    <pre className="my-2 overflow-x-auto rounded-lg bg-stone-900 p-3 font-mono text-[13px] leading-relaxed text-white [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-white">
-      {children}
-    </pre>
-  ),
+  pre: ({ children }) => <CopyCode>{children}</CopyCode>,
 };

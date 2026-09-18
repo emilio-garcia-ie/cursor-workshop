@@ -1,54 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { aggregateFlag, setAggregate } from "@/lib/progress";
+import { useProgress } from "./ProgressProvider";
 
-const KEY = "hearthline-progress-v1";
-
-type Progress = Record<string, { complete?: boolean; outcome?: boolean }>;
-
-function readAll(): Progress {
-  try {
-    return JSON.parse(localStorage.getItem(KEY) ?? "{}") as Progress;
-  } catch {
-    return {};
-  }
-}
-
-/** Persisted per-step checkboxes (Mark complete + outcome). */
 export default function StepProgress({ slug }: { slug: string }) {
-  const [state, setState] = useState({ complete: false, outcome: false });
-
-  useEffect(() => {
-    const all = readAll();
-    if (all[slug]) setState({ complete: !!all[slug].complete, outcome: !!all[slug].outcome });
-  }, [slug]);
-
-  const toggle = (k: "complete" | "outcome") => {
-    const next = { ...state, [k]: !state[k] };
-    setState(next);
-    const all = readAll();
-    all[slug] = next;
-    localStorage.setItem(KEY, JSON.stringify(all));
-  };
-
+  const { state, ready, writable, update, catalog } = useProgress();
+  const step = state.steps[slug];
   return (
-    <div className="mt-4 flex flex-wrap gap-4 rounded-xl bg-white p-4 shadow-sm">
-      <label className="flex items-center gap-2 text-sm font-semibold">
-        <input
-          type="checkbox"
-          checked={state.complete}
-          onChange={() => toggle("complete")}
-        />
-        Mark complete
-      </label>
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={state.outcome}
-          onChange={() => toggle("outcome")}
-        />
-        I got the expected outcome
-      </label>
-    </div>
+    <section aria-label="Step self-report" className="mt-4 rounded-xl bg-white p-4 shadow-sm">
+      <h2 className="font-semibold">Step self-report</h2>
+      <p className="my-2 text-sm">Mark the whole step complete independently, or complete each section. Points are counted once per step; outcome is a separate self-report.</p>
+      {step?.legacy && <p className="mb-2 text-sm">Previous version flags are preserved. They do not mark any section learned.</p>}
+      <div className="flex flex-wrap gap-4">
+        {(["complete", "outcome"] as const).map(key => <label key={key} className="flex items-center gap-2 text-sm">
+          <input type="checkbox" disabled={!ready || !writable} checked={aggregateFlag(step, key)} onChange={event => {
+            const checked = event.target.checked;
+            update(current => setAggregate(current, catalog, slug, key, checked));
+          }} />
+          {key === "complete" ? "Mark whole step complete (self-report)" : "I got the expected outcome"}
+        </label>)}
+      </div>
+    </section>
   );
 }
