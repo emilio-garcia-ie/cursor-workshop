@@ -1,0 +1,32 @@
+---
+description: Freshness and citation standards for curriculum source files. Use when editing steps or the bibliography so every claim stays traceable to a source fetched within the 14-day window.
+globs: steps/**, bibliography.md, fact-check.md
+alwaysApply: false
+---
+
+# Curriculum freshness rules
+
+- Every mechanism claim in `steps/**` carries a `[n]` marker resolving to
+  `bibliography.md` per `specs/citation-format.md`; third-party claims add
+  `[third-party]`.
+- Every claim traces to a source URL that was fetched and content-verified
+  with an access date no older than a rolling 14 days from the last
+  successful content verification. A reachable URL or HTTP 200 alone does
+  not count as verification; body text must have been inspected.
+- New or changed claims get a `fact-check.md` row (claim/source/date/
+  verdict) per `specs/fact-check-schema.md`; only `confirmed`, `corrected`,
+  or `cut` are valid verdicts.
+- Re-runs of a refresh must not duplicate bibliography entries: match on URL
+  before adding, and update existing entries in place.
+- Findings about features absent from the audited curriculum are recorded as
+  "new to coverage"; never as "newly shipped" without fetched release
+  evidence.
+- A failed URL fetch is recorded as unavailable, not deprecated; it blocks
+  only the dependent work and is documented with its blocker.
+- Freshness findings are classified (critical correction / deepen / new
+  optional / footnote / defer) with stable IDs and a change ledger so an
+  interrupted refresh can resume without losing pending items.
+- Applying changes from a refresh requires user approval after findings are
+  reported; changed step files are marked `needs-review` without erasing
+  learner progress; case-study edits are additive-only except documented
+  freshness invalidation. No publish, deploy, or push during a refresh.

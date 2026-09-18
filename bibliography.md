@@ -1,8 +1,17 @@
 # Bibliography
 
-All URLs fetched HTTP 200 on 2026-09-11. Citation markers `[n]` in step
-files resolve to these entries. Third-party (non-Cursor, non-repo) claims
-carry an additional `[third-party]` tag per `specs/citation-format.md`.
+Citation markers `[n]` in step files resolve to these stable entries.
+Third-party (non-Cursor, non-repo) claims carry an additional `[third-party]`
+tag per `specs/citation-format.md`.
+
+The original bibliography recorded HTTP 200 on 2026-09-11; that historical
+assertion is not a current status check. B01 inspected 32 original sources
+on 2026-09-16 and a canonical replacement for [28]; see `FRESHNESS-2026-09.md`
+for per-source captures and limitations. September 16 captures have unknown
+origin HTTP status unless explicitly recorded otherwise. B03 reused cached
+primary bodies only; it performed no new fetches. Dates below retain earlier
+access records except for repaired/new entries; September 16 fact-check rows
+use the same-day captures documented in the report.
 
 [1] Cursor. "Rules." Cursor Docs. https://cursor.com/docs/rules. Accessed 2026-09-11.
 [2] Cursor. "Rules Help." Cursor Help. https://cursor.com/help/customization/rules.md. Accessed 2026-09-11.
@@ -31,9 +40,12 @@ carry an additional `[third-party]` tag per `specs/citation-format.md`.
 [25] Cursor. "Canvas." Cursor Docs. https://cursor.com/docs/agent/tools/canvas. Accessed 2026-09-11.
 [26] Cursor. "Slack Integration." Cursor Docs. https://cursor.com/docs/integrations/slack. Accessed 2026-09-11.
 [27] Cursor. "Marketplace." https://cursor.com/marketplace. Accessed 2026-09-11.
-[28] Cursor. "Plugins and Team Marketplaces." Cursor Docs. https://cursor.com/docs/plugins.md. Accessed 2026-09-11.
+[28] Cursor. "Plugins." Cursor Docs. https://cursor.com/docs/plugins. Accessed 2026-09-16. Canonical replacement; former `/docs/plugins.md` returned HTTP 404 on 2026-09-16. Replacement body verified from cached capture; origin HTTP unknown.
 [29] Cursor. "Enterprise." Cursor Docs. https://cursor.com/docs/enterprise.md. Accessed 2026-09-11.
 [30] Cursor. "Team Analytics API (adoption metrics)." Cursor Docs. https://cursor.com/docs/account/teams/analytics-api.md. Accessed 2026-09-11.
 [31] Cursor. "Cloud Agents." Cursor Docs. https://cursor.com/docs/cloud-agent. Accessed 2026-09-11.
 [32] Cursor. "Cloud Agent Subscriptions." Changelog. https://cursor.com/changelog/08-19-26. Published 2026-08-19.
 [33] Cursor. "Side Chats." Cursor Help. https://cursor.com/help/ai-features/side-chats.md. Accessed 2026-09-11.
+[34] Cursor. "Subagents." Cursor Docs. https://cursor.com/docs/subagents. Accessed 2026-09-16. Cached primary body inspected; origin HTTP unknown.
+[35] Cursor. "Plugins reference." Cursor Docs. https://cursor.com/docs/reference/plugins. Accessed 2026-09-16. Cached primary body inspected; origin HTTP unknown.
+[36] Cursor. "Changelog." https://cursor.com/changelog. Accessed 2026-09-16. Cached release bodies inspected: Projects (2026-09-10), self-hosted machines (2026-09-02), start from scratch (2026-08-27), Origin (2026-08-17); origin HTTP unknown.
