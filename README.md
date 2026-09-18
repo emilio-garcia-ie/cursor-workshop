@@ -11,7 +11,7 @@ forward-deployed engineers."
 > Cursor feature names belong to their owners; docs are cited, not copied.
 
 - Case-study repo: `hearthline-operator-console` (sibling directory / repo).
-- Curriculum: `steps/` (33 steps, 440 points, four-tab structure).
+- Curriculum: `steps/` (33 steps, 520 points, four-tab structure).
 - Sources: `bibliography.md`. Claim log: `fact-check.md`.
 - Terms: `glossary.md`. Diagrams: `diagrams/*.mmd`.
 - Versions & personas: `tracks.md`. Interactive site: `site/`.

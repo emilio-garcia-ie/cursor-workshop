@@ -1,4 +1,16 @@
-flowchart LR
-    E["git push"] --> H["beforeShellExecution hook"]
-    H -->|tests pass| A["allow: push proceeds"]
-    H -->|tests fail, exit 2| D["deny: push blocked + reason"]
+flowchart TD
+    E["Cursor-triggered shell action"] --> M{"Registered beforeShellExecution hook matches?"}
+    M -->|yes| H["Run hook"]
+    M -->|no| N["No decision from this hook; other controls still apply"]
+    H -->|exit 0| J{"Permission JSON decision"}
+    J -->|allow| A["Hook permits action; other controls still apply"]
+    J -->|deny| D["Block action"]
+    J -->|ask| U["Request user decision"]
+    J -->|invalid JSON or schema| D
+    U -->|approved| A
+    U -->|denied| D
+    H -->|exit 2| D
+    H -->|other nonzero exit / failure| F{"failClosed: true?"}
+    F -->|yes| D
+    F -->|no: default fail open| N
+    X["Ordinary Git CLI / terminal outside Cursor"] --> O["Not covered by this Cursor event hook; Git/server controls are separate"]

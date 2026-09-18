@@ -3,7 +3,8 @@
 Unofficial Cursor curriculum repo (Hearthline case study). Content repo with
 a Next.js site in `site/`.
 
-- Curriculum source: `steps/*.md` per `specs/step-schema.md`. Points total 440.
+- Curriculum source: `steps/*.md` per `specs/step-schema.md`. Points total 520
+  (modules 80/80/70/55/65/70/100).
 - Every claim cited (`bibliography.md`); log rows in `fact-check.md`.
 - Tracks/versions/personas: `tracks.md` is canonical; site code mirrors it.
 - Case-study repo lives next door: `../hearthline-operator-console` (tickets,

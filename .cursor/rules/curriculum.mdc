@@ -9,9 +9,9 @@ alwaysApply: false
 - Every mechanism claim carries `[n]` resolving to `bibliography.md`. No
   invented Cursor features: bibliography-or-it-doesn't-exist.
 - Step files follow `specs/step-schema.md` (tabs, closers, frontmatter).
-- Points sum to 440 across `steps/` (70/65/60/40/50/60/95). Re-verify on change.
-- `tracks.md` is the single source for version/persona sets; `site/` imports
-  it, never duplicates it.
+- Points sum to 520 across `steps/` (80/80/70/55/65/70/100). Re-verify on change.
+- `tracks.md` is canonical for version/persona sets; `site/src/lib/tracks.ts`
+  mirrors them. Verify exact agreement, including persona intersections.
 - The unofficial disclaimer stays on every site route.
 - Third-party claims carry `[third-party]` per `specs/citation-format.md`.
 - New claims get a `fact-check.md` row (claim/source/date/verdict).

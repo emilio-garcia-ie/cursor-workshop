@@ -17,7 +17,6 @@ export const PERSONAS = [
 ] as const;
 export type Persona = (typeof PERSONAS)[number];
 
-/** Emphasis lists (long version shows everything). */
 export const PERSONA_STEPS: Record<Persona, number[]> = {
   vibecoders: [1, 2, 3, 5, 16, 17, 21, 23],
   developers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21, 22],
