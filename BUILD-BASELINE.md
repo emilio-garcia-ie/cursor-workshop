@@ -32,3 +32,13 @@ Recorded: 2026-09-11. Source: inspection of /Users/emilio/Documents/cursor-train
 - zod: 4.6.2 (registry latest; API routes validate with Zod per ORG-STANDARDS #6).
 - Cursor CLI: ships with Cursor app; install/auth per https://cursor.com/docs/cli
   (re-check at Step-28 execution time).
+
+## E02 site dependency supersession (2026-09-17)
+
+- The E02 pins above apply to the **learner-cloned hearthline-operator-console**
+  (next@14.2.35 / react@18 / Tailwind v3), which is unchanged (additive-only).
+- The **workshop `site/`** was upgraded to resolve `npm audit` findings
+  (critical Next.js + high PostCSS): `next@16.3.5`, `react@19.3.0`,
+  `eslint@9` + flat config, `vitest@4.1.11`. Audit now reports 0
+  vulnerabilities. See QA-SIGNOFF.md (Dependency remediation).
+- Console BUILD-BASELINE E02 pins remain authoritative for the console.
