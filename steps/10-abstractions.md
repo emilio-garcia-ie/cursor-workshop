@@ -11,32 +11,127 @@ personas: ["developers", "ai-engineers", "forward-deployed"]
 
 ## Learn
 
-Five mechanisms, five jobs — the matrix:
+Five mechanisms, five jobs — choose the missing capability, not the most
+impressive name. A rule can describe a review standard without performing
+a review; a tool connection can retrieve a PR without authorizing a merge.
+Keep instructions, execution, and verification separate.
 
-- **Rules** — per-session project context (conventions, standards)[1].
-- **Skills** — on-demand task expertise (`hearthline-pr`, `spec`)[9].
-- **MCP** — external tools, DBs, APIs (GitHub, tickets, chat)[3].
-- **Hooks** — deterministic lifecycle automation (test-before-push)[5].
-- **Subagents** — isolated investigation (reviewers, bug hunts)[15].
+| Mechanism | Job | Hearthline example | Boundary |
+|---|---|---|---|
+| Rules | Applicable context and conventions[1] | Integer cents | Guidance, not an execution gate; scope matters[1][2] |
+| Skills | Reusable task procedure[9] | Draft Priya's PR format | Invocation is not proof the checklist was completed |
+| MCP | External capabilities[3] | Read GitHub PRs | Connection is not authorization for every operation |
+| Hooks | Lifecycle checks and permission decisions[5] | Gate a covered Cursor shell event | Exit/JSON/failure policy and event coverage matter[5] |
+| Subagents | Delegated work in a separate context[34] | Standards report | Separate context is not a separate checkout or guaranteed truth[34] |
 
-When to reach for which: context that is always true → rule; task you repeat
-→ skill; system outside the repo → MCP; check that must never be skipped →
-hook; investigation that deserves its own context → subagent.
+When to reach for which: convention → rule; repeated task → skill; external
+system → MCP; check at a supported event → hook; focused investigation →
+subagent. Sometimes the right answer is an ordinary test plus human review,
+not a sixth layer of agent configuration.
 
 ## Implement
 
-Reading-only step. Run the same checklist three ways and compare: the
-`hearthline-pr` skill (your context) vs the org-standards reviewer
-(subagent, own read-only context) vs the built-in review (generic). Same
-job, three costs, three guarantees[20]. Then pick your first adoption for
-your own codebase and write down why.
+Reading-only step: no application or configuration edits. Compare the
+`hearthline-pr` skill, org-standards subagent, and Agent Review on the same
+feature diff. They are not three identical reviewers: PR formatting, a
+standards report, and a dedicated code review have different jobs. Agent
+Review reads `BUGBOT.md` and offers Quick/Deep depths[20]; the custom
+reviewer's `readonly` restriction is separate from report correctness[34].
+
+### Exercise kit
+
+#### Starter code path
+
+`hearthline-operator-console/.cursor/skills/pr/SKILL.md`,
+`.cursor/agents/org-standards.md`, `.cursor/hooks.json`, and
+`docs/ORG-STANDARDS.md`. Use the learner-authored versions from Steps 7–9
+where available; if those kits are incomplete, compare definitions only
+and label invocation results unverified.
+
+#### Minimal working example
+
+Run `git diff main...HEAD --stat`, `git diff`, and `git diff --cached` in
+the feature checkout to identify committed, working, and staged changes.
+Supply the same chosen diff and evidence to each comparison. Use
+`/hearthline-pr` for the skill[9] and explicitly request delegation to
+org-standards[34] from the tooling project where their definitions live,
+supplying the feature path. Run `/agent-review` manually in the feature
+checkout[20]. Record review depth, accessible diff, and available standards
+rather than assuming equal inputs.
+
+```text
+For the supplied HLN-101 diff, identify which checks you actually performed.
+Separate formatting, standard violations, and functional correctness.
+Cite evidence for findings. Mark missing test output unverified.
+Do not edit, commit, push, or open a PR.
+```
+
+#### Expected diff
+
+None. Produce a comparison in chat with columns: mechanism, actual inputs,
+actions taken, useful findings, unsupported assertions, missing evidence,
+and observed usage if available. Do not invent a dollar or token figure.
+
+#### Hints
+
+- A correctly formatted PR can still describe broken code. Grade the skill
+  on honest formatting, not on catching every functional bug.
+- A hook may run a test command without a reviewer reading the business
+  requirement. Keep those checks separate in the comparison.
+- If `BUGBOT.md` is absent, record that; do not call Agent Review incapable
+  of organization-specific instructions[20].
+
+#### Solution approach
+
+First classify three needs: “money must be cents,” “draft this PR,” and
+“check this supported shell event.” Select rule, skill, and hook respectively,
+then name the evidence each one cannot provide. Add “retrieve external PR
+metadata” (MCP) and “independent-context review” (subagent). Compare real
+outputs only after this classification, so novelty does not choose for you.
+
+#### Expected result
+
+Five justified choices and one rejected alternative for each. For the
+three-run comparison, an honest gap is a valid result; no mechanism earns
+an automatic correctness or enforcement guarantee.
+
+[SCREENSHOT: Five-mechanism decision table beside the three-run comparison with missing evidence marked]
+
+### Common mistakes
+
+- **Mistake 1:** Using a rule as proof a check ran. Require actual output.
+- **Mistake 2:** Calling a built-in review generic by necessity. Check its
+  available `BUGBOT.md` input and selected depth[20].
+- **Mistake 3:** Assuming local configuration follows every runtime. Verify
+  scope, team policy, and surface-specific availability before rollout.
+
+### Working habits
+
+- **Pro tip 1:** Choose one owner and one observable outcome per mechanism.
+- **Pro tip 2:** Compare on the same diff; changed inputs invalidate a
+  confident “this reviewer is better” conclusion.
+
+#### Stretch goal
+
+Remove one proposed mechanism from your own adoption choice. Explain which
+risk is still covered by ordinary tests or human review and which is not.
 
 ## Advanced
 
-Rollout playbook: Day 1 rules (senior-authored) → Week 1 MCP → Week 2 hooks
-+ skills → Week 3 subagents → ongoing sharing. Track: time-to-first-commit,
-PR cycle time, pre-CI vs CI vs production bugs, tokens per engineer per
-month, developer satisfaction[30].
+Treat the rollout sequence as a suggestion: rules first, then one useful
+integration, then measured skills/hooks, then focused reviewers. Track
+PR cycle time and escaped bugs from your own delivery records, and collect
+developer feedback directly. Cursor's Analytics API supplies usage metrics
+and is **Enterprise-only**; it does not establish every metric in that
+worksheet[30]. No credentialed API call is required here.
+
+Availability is not implied by the matrix. Side chats are local-only and
+cannot nest[33]. Shared canvases are read-only team snapshots with paid-plan,
+team-membership, and storage-compatible privacy requirements[25]. Slack
+follow-up authority depends on team policy[26]. Cloud hooks do not cover
+early read-only turns and do not receive local home-directory hooks[31].
+These qualifications matter when choosing a runtime; none is a mandatory
+integration for this reading-only step.
 
 ## Complete
 

@@ -1,39 +1,92 @@
 ---
 step: 21
 title: "Browser and Design Mode: Fix What You See"
-points: 10
+points: 15
 module: "Debug & Test"
 versions: ["long"]
 personas: ["vibecoders", "developers"]
 ---
 
-# Step 21 — Browser and Design Mode: Fix What You See (10 pts)
+# Step 21 — Browser and Design Mode: Fix What You See (15 pts)
 
 ## Learn
 
-The integrated browser runs your app where the agent can see it[16]. Design
-Mode lets you select elements, annotate, drag to reorder, inspect props, and
-adjust styles — the agent finds the code[17].
+Cursor's native browser supports navigation, interaction, screenshots, and
+console inspection without installing an external browser tool[16]. Design
+Mode lives in the Agents Window browser: select an element and prompt against
+it and its code context[17]. Network inspection has a surface limitation in
+the cited documentation; do not assume every browser layout exposes it[16].
+
+A screenshot proves appearance at a particular viewport, not export correctness.
+The starter Payments export is an anchor in `src/app/payments/page.tsx`, already
+styled dark. There is no export dialog until the learner implements HLN-101.
+Choose a concrete improvement rather than asking to build a nonexistent flow.
 
 ## Implement
 
-1. Open the browser panel; navigate to `/payments` (dev server running).
-2. Enter Design Mode. Select the export button. Annotate: "Make this the
-   primary action. It should stand out in the toolbar."[17]
-3. Let the agent edit. Verify in the browser.
-4. Test a flow end to end: ask the agent to click through, download the
-   export, and verify the row count matches[16].
+### Exercise kit — accessible export action with evidence
+
+**Starter input:** Use a learner copy with dependencies and its dev server
+running. Read the Payments page and export route. Record the server's actual
+port and branch; do not open another owner's server or start a duplicate.
+The `.cursor/mcp.example.json` file is only an example, not an active browser
+configuration; this kit uses the native browser[16].
+
+```text
+On /payments, select the existing Export link. Rename it Export CSV, add a
+visible keyboard-focus treatment, and retain its search-aware href. Preserve
+server-side export behavior and the planted defaults. Do not add a dialog,
+change API routes, or alter data. Work only in this learner checkout.
+```
+
+1. Capture the initial page at a recorded narrow and wide viewport. Use Design
+   Mode's element selection to target the link[17], then review the source diff.
+2. Return to normal browsing. Verify the label, keyboard focus visibility, and
+   search query preservation. Check that the table and search remain usable.
+3. Follow the export link on synthetic seeded data. Record the requested URL,
+   response content type, and the actual CSV contents. If a browser download
+   is inaccessible, inspect the local route response separately and label that
+   evidence API-only; do not claim the browser downloaded it.
+4. Run `npm test -- tests/api.test.ts` and the full `npm test` in the learner
+   checkout. Do not "fix" the sensitive-default characterization in this kit.
+
+**Worked example:** Searching for a synthetic payment ID must remain present
+in the export URL after the label change. The Payments page requests 20 rows;
+the export route requests up to 10000. A downloaded file having more rows than
+the visible page can be correct. Compare against the same filter's full result,
+not the number of table rows currently rendered.
+
+**Expected diff or deliverable:** A Payments-page-only patch, before/after
+viewport evidence, focus check, and export behavior record. Explicitly mark
+missing browser capabilities or download evidence as unverified.
+
+**Hints:** Inspect the anchor's `href` before and after. Keep viewport and seed
+constant when judging the visual change. CSV fields can contain quoted newlines;
+a naive line count is not a general CSV record parser.
+
+**Solution:** Change action labeling/focus presentation without changing the
+query or export endpoint. The unchanged route tests establish baseline behavior;
+a screenshot and keyboard check establish the separate visual acceptance.
+
+> Screenshot placeholder: same-viewport before/after Export CSV action and
+> keyboard focus, accompanied by redacted response evidence from synthetic data.
 
 ## Pro tips
 
-- Fastest UI fix loop available: see it, annotate it, verify it[17].
-- Keep the dev server on the seeded data so counts are deterministic.
+- Keep visual acceptance and data acceptance as separate checklist rows.
+- Record the actual port, branch, viewport, and filter beside every screenshot.
+
+### Common mistakes
+
+- Testing a Step-5 dialog that has not been implemented in this learner branch.
+- Equating 20 visible rows with the entire filtered export.
+- Claiming a download or network inspection succeeded from a screenshot alone.
 
 ## Advanced
 
-The browser is an execution environment, not a viewer: flows, downloads,
-and counts are all assertable by the agent[16]. The visual loop closes with
-Design Mode feeding implementation and the browser verifying it.
+**Stretch:** Review the same learner patch at a narrow viewport with a long
+search value. If overflow appears, propose a scoped layout change and new
+acceptance evidence; do not redesign the entire dashboard.
 
 ## Complete
 
