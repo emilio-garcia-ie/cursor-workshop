@@ -43,7 +43,7 @@ export default function StepView({ locale, slug, searchParams }: {
   return (
     <LocaleProvider locale={locale}>
       <main className="mx-auto max-w-3xl px-4 pb-16">
-        <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-stone-500">
+        <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-stone-600">
           {format(t.eyebrowLine, { module: moduleLabel(locale, step.module), points: step.points })}
         </p>
         <h1 className="mt-2 font-serif text-4xl">

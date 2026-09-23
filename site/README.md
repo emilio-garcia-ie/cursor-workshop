@@ -7,7 +7,7 @@ Next.js 16 site for the cursor-workshop curriculum (`../steps/*.md`). Step pages
 - `npm run dev` — local dev server
 - `npm run build` / `npm start` — production build and serve
 - `npm run test` — Vitest unit contracts (tab splitting, quiz parser, progress model, progress file adapter, step navigation, track filters)
-- `npm run test:browser` — Playwright check (migration → recovery → export/import → Resume). Uses the installed Google Chrome binary; no browser download. Set `QA_PRODUCTION=1` to run against `next start` instead of dev; set `QA_SCREENSHOT_DIR` to save 390px/1440px screenshots.
+- `npm run test:browser` — Playwright check (migration → recovery → export/import → Resume) plus axe ARIA audits and WCAG contrast sampling on 6 pages. Uses the installed Google Chrome binary by default; set `QA_BROWSER=webkit` or `QA_BROWSER=firefox` to run another engine (install with `npx -y playwright@1.58.2 install webkit firefox`). Set `QA_PRODUCTION=1` to run against `next start` instead of dev; set `QA_SCREENSHOT_DIR` to save 390px/1440px screenshots; set `QA_HOST=localhost` to serve on localhost instead of 127.0.0.1.
 - `npm run lint`, `npm run typecheck` — gate scripts
 - `npm run check:termbase` — offline ES termbase check: banned EN terms must not appear untranslated in ES prose (`steps/es/`, `glossary.es.md`, `bibliography.es.md`, `fact-check.es.md`). `npm test` runs the same check as a unit gate.
 - `npm run check:anchors` — bibliography `#n` anchor parity (exact) and glossary entry-count parity between ES and EN files.

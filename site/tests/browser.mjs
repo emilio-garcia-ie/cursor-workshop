@@ -1,19 +1,104 @@
 import assert from "node:assert/strict";
-import { chromium } from "playwright-core";
+import { chromium, webkit, firefox } from "playwright-core";
 import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
 
-const base = "http://127.0.0.1:3217";
-const server = spawn(process.execPath, ["node_modules/next/dist/bin/next", process.env.QA_PRODUCTION ? "start" : "dev", "-p", "3217", "-H", "127.0.0.1"], { stdio: "inherit" });
+const require = createRequire(import.meta.url);
+const axeSourcePath = require.resolve("axe-core/axe.min.js");
+const engine = process.env.QA_BROWSER ?? "chromium";
+
+async function axeAudit(page, label) {
+  await page.addScriptTag({ path: axeSourcePath });
+  const violations = await page.evaluate(async () => {
+    const results = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa"] } });
+    return results.violations
+      .filter((v) => v.impact === "critical" || v.impact === "serious")
+      .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help, target: v.nodes[0]?.target?.join(" ") ?? "" }));
+  });
+  assert.deepEqual(violations, [], `${label}: axe critical/serious violations`);
+}
+
+async function contrastAudit(page, label) {
+  const failures = await page.evaluate(() => {
+    const parseColor = (value) => {
+      const m = value.match(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/);
+      return m ? [Number(m[1]), Number(m[2]), Number(m[3]), m[4] === undefined ? 1 : Number(m[4])] : null;
+    };
+    const luminance = ([r, g, b]) => {
+      const channel = (c) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4); };
+      return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+    };
+    const ratioOf = (fg, bg) => {
+      const l1 = luminance(fg);
+      const l2 = luminance(bg);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    };
+    const backgroundOf = (el) => {
+      let node = el;
+      while (node) {
+        const color = parseColor(getComputedStyle(node).backgroundColor);
+        if (color && color[3] > 0.9) return color;
+        node = node.parentElement;
+      }
+      return [255, 255, 255, 1];
+    };
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const failures = [];
+    const seen = new Set();
+    let textNode;
+    while ((textNode = walker.nextNode())) {
+      const text = textNode.textContent.trim();
+      if (!text) continue;
+      const el = textNode.parentElement;
+      if (!el || seen.has(el)) continue;
+      seen.add(el);
+      const style = getComputedStyle(el);
+      if (style.visibility === "hidden" || style.display === "none") continue;
+      const fg = parseColor(style.color);
+      if (!fg) continue;
+      const bg = backgroundOf(el);
+      const ratio = ratioOf(fg, bg);
+      const size = parseFloat(style.fontSize);
+      const bold = parseInt(style.fontWeight, 10) >= 700;
+      const large = size >= 24 || (size >= 18.66 && bold);
+      const needed = large ? 3 : 4.5;
+      if (ratio < needed - 0.005) {
+        failures.push({ text: text.slice(0, 40), ratio: Math.round(ratio * 100) / 100, needed, tag: el.tagName.toLowerCase() });
+      }
+    }
+    return failures;
+  });
+  assert.deepEqual(failures, [], `${label}: text contrast below WCAG AA`);
+}
+
+const loopbackHost = process.env.QA_HOST === "localhost" ? "localhost" : "127.0.0.1";
+const base = `http://${loopbackHost}:3217`;
+const server = spawn(process.execPath, ["node_modules/next/dist/bin/next", process.env.QA_PRODUCTION ? "start" : "dev", "-p", "3217", "-H", loopbackHost], { stdio: "inherit" });
 let browser;
 try {
   for (let i = 0; i < 120; i++) {
     try { if ((await fetch(base)).ok) break; } catch {}
     await new Promise(resolve => setTimeout(resolve, 500));
   }
-  browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true });
+  browser = engine === "chromium"
+    ? await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true })
+    : await (engine === "webkit" ? webkit : firefox).launch({ headless: true });
   const context = await browser.newContext({ acceptDownloads: true });
   const errors = [];
-  context.on("page", opened => opened.on("pageerror", error => errors.push({ url: opened.url(), message: error.message })));
+  const webkitPrefetchNoise = [];
+  context.on("page", opened => opened.on("pageerror", error => {
+    // Known WebKit bug (engine, not app): same-origin fetches with custom
+    // headers (Next.js RSC prefetches, `?_rsc=`) on non-standard ports are
+    // misrouted through CORS access-control checks and fail. Navigations
+    // still succeed via fallback; every functional assertion covers this.
+    // Any other error — including non-prefetch access-control failures —
+    // still fails the suite.
+    if (engine === "webkit" && error.message.includes("due to access control checks") && error.message.includes("_rsc=")) {
+      webkitPrefetchNoise.push({ url: opened.url(), message: error.message });
+      return;
+    }
+    errors.push({ url: opened.url(), message: error.message });
+  }));
   const page = await context.newPage();
   await page.goto(base);
   const legacy = { "01-day-one": { complete: true, outcome: true } };
@@ -212,6 +297,21 @@ try {
   await esGlossary.close();
   await esBiblio.close();
   await esStep.close();
+  for (const [label, url] of [
+    ["EN home", "/"],
+    ["ES home", "/es"],
+    ["EN step 01", "/steps/01-day-one"],
+    ["ES step 01", "/es/steps/01-day-one"],
+    ["ES glossary", "/es/glossary"],
+    ["ES bibliography", "/es/bibliography"],
+  ]) {
+    const auditPage = await context.newPage();
+    await auditPage.goto(`${base}${url}`);
+    await auditPage.locator("main").waitFor();
+    await contrastAudit(auditPage, label);
+    await axeAudit(auditPage, label);
+    await auditPage.close();
+  }
   const lastStep = await context.newPage();
   await lastStep.goto(`${base}/steps/33-improvement-loop`);
   await lastStep.getByRole("link", { name: "All steps complete", exact: true }).waitFor();
@@ -243,7 +343,8 @@ try {
     await esStepShot.close();
   }
   assert.deepEqual(errors, []);
-  console.log("PASS: migration/retained legacy, single whole-step self-report with expected-result anchor and no per-tab checkboxes, snapshot preserved on malformed v2 with raw recovery byte-exact and disabled empty export, section reconciliation, export/import/reload, invalid/cancel import, keyboard tabs, copy failure, single H1, citations/diagrams, Resume/filter fallback, step footer next/previous with finished state on step 33, quiz grading with persistence across reload, progress file overwrite-in-place and reload pickup without a picker, ES locale with lang attribute, localized UI, locale-correct footer, persistent language toggle, ES glossary/bibliography routes with locale-aware citations and step links, totals 215/355/520 with step 6 at 25 pts, 390px overflow; pageerror listeners on every context page; no client errors");
+  if (webkitPrefetchNoise.length > 0) console.log(`note: ${webkitPrefetchNoise.length} WebKit RSC-prefetch fetches rejected by the engine's access-control bug (functional impact: prefetch-only, navigations verified)`);
+  console.log(`PASS (engine=${engine}): migration/retained legacy, single whole-step self-report with expected-result anchor and no per-tab checkboxes, snapshot preserved on malformed v2 with raw recovery byte-exact and disabled empty export, section reconciliation, export/import/reload, invalid/cancel import, keyboard tabs, copy failure, single H1, citations/diagrams, Resume/filter fallback, step footer next/previous with finished state on step 33, quiz grading with persistence across reload, progress file overwrite-in-place and reload pickup without a picker, ES locale with lang attribute, localized UI, locale-correct footer, persistent language toggle, ES glossary/bibliography routes with locale-aware citations and step links, axe + contrast audits on 6 pages, totals 215/355/520 with step 6 at 25 pts, 390px overflow; pageerror listeners on every context page; no client errors`);
 } finally {
   await browser?.close();
   server.kill("SIGTERM");

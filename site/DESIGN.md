@@ -22,8 +22,8 @@ focus only; motion must never compete with the code being read.
   carefully set page, not an app dashboard.
 - Voice: plain, direct, second person ("you"). No marketing superlatives.
 - The single recurring motif is the **orange Cursor accent used only for
-  interactive intent** (links to citations, the Next step control, the active
-  tab). That motif is repeated nowhere else.
+  interactive intent** (citation links, the brand wordmark, keyboard focus).
+  That motif is repeated nowhere else.
 
 ## Palette
 
@@ -31,12 +31,16 @@ focus only; motion must never compete with the code being read.
 |---|---|---|
 | `--cream` (background) | `#faf6ef` | Warm paper background reduces glare for long reading sessions. |
 | `--ink` (text) | `#1c1917` | Near-black warm ink maximizes contrast on cream while staying warmer than pure black. |
-| `--cursor-orange` (accent) | `#f54e00` | The workshop teaches Cursor; the accent marks intent/action and is the one deliberate accent (R-31). |
+| `--cursor-orange` (accent) | `#c2410c` | The workshop teaches Cursor; the accent marks intent/action and is the one deliberate accent (R-31). Text-safe orange: passes WCAG AA on cream (4.8:1), machine-sampled. |
 | Module pastels | `#fde68a #fed7aa #fecaca #bfdbfe #c7d2fe #d8b4fe #bbf7d0` | Distinct module hues for the progress timeline dots; decorative, small-area, and consistent with the warm palette. |
 
-Contrast: `--ink` on `--cream` is 13.7:1; `--cursor-orange` on `--cream` is
-4.6:1 (AA for normal text, R-25). Pastels are used only for large dots/colors
-with adjacent ink labels, never for body text.
+Contrast: `--ink` on `--cream` is 16.2:1; `--cursor-orange` (`#c2410c`) on
+`--cream` is 4.8:1 (AA for normal text, R-25). Muted labels on cream use
+stone-600 (7.0:1); captions on white cards keep stone-500 (4.8:1). Pastels
+are used only for large dots/colors with adjacent ink labels, never for body
+text. Rendered-text contrast is machine-sampled in the browser suite at WCAG
+AA thresholds; the sampling corrected two earlier hand-calculated values
+(the pre-fix accent measured 3.26:1, not the documented 4.6:1).
 
 ## Typography
 
@@ -58,8 +62,8 @@ the mono stack with a subtle `stone-900/7%` chip background.
 ## Component intent (R-31 one-liners)
 
 - Step tabs: information grouping so a learner reads Learn, then Implement,
-  then checks Pro tips and the quiz; the active tab is the only orange-filled
-  element.
+  then checks Pro tips and the quiz; the active tab is the ink-filled
+  element (stone-900 background, white text).
 - Self-report checkbox: single explicit confirmation at the end of a step;
   label references the step's Expected result.
 - Next/Previous footer: a directional cue; the forward arrow on Next is

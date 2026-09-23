@@ -11,7 +11,7 @@ export function mdComponentsFor(locale: Locale): Components {
     h3: ({ children }) => {
       const raw = String(children);
       return (
-        <h3 id={raw.trim().toLowerCase().replace(/\s+/g, "-")} className="mb-1 mt-4 text-sm font-bold uppercase tracking-widest text-stone-500">
+        <h3 id={raw.trim().toLowerCase().replace(/\s+/g, "-")} className="mb-1 mt-4 text-sm font-bold uppercase tracking-widest text-stone-600">
           {kitLabel(locale, raw)}
         </h3>
       );

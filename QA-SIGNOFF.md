@@ -46,8 +46,12 @@ Block 1 — Hard Gate (all answers no):
 - R-23 PASS: no new visual assets; only pre-existing curriculum diagrams.
 - R-24 PASS: nav links (steps, glossary, bibliography; ES equivalents) all
   built and visited in the suite.
-- R-25 PASS: ink/cream 13.7:1, accent/cream 4.6:1 documented in DESIGN.md;
-  pastels are decorative dots with adjacent ink labels, never text.
+- R-25 PASS (after correction): machine contrast sampling exposed the
+  documented "accent/cream 4.6:1" as wrong (measured 3.26:1); the accent
+  token was darkened to #c2410c (4.8:1) and two stone-500-on-cream labels
+  moved to stone-600. Every rendered text node is now sampled in-suite at
+  WCAG AA thresholds; ink/cream measures 16.2:1; pastels are decorative
+  dots with adjacent ink labels, never text.
 - R-26 PASS: every control clicked in the suite with real behavior (grade,
   save/overwrite/load, export/import, copy + failure fallback, checkboxes,
   toggle).
@@ -131,6 +135,38 @@ Block 4 — Craftsmanship & Quality Locks (all answers no):
   team-marketplace installation remain unverified (opt-in examples only).
 - Pre-existing console baseline: standalone `tsc --noEmit` fails TS2802 in
   tests/seed.test.ts; `next build` type-checking passes. Not changed.
+
+### Post-sign-off QA additions (2026-09-23, user-directed)
+
+User decisions recorded: plan a Phase-4 console migration (below); hold all
+merges pending user branch review; keep Vercel on hold.
+
+- **axe ARIA audit** (axe-core, wcag2a + wcag2aa tags, critical/serious
+  threshold): 0 violations across EN home, ES home, EN/ES step 01, ES
+  glossary, ES bibliography. Partially closes the accessibility gap; a real
+  screen-reader run remains deferred.
+- **Machine contrast sampling** (every rendered text node, WCAG AA
+  thresholds, in-suite): exposed that DESIGN.md's hand-calculated
+  "orange/cream 4.6:1" was actually **3.26:1**. Fixed: accent token
+  `#f54e00` → `#c2410c` (4.8:1 on cream), and the two stone-500-on-cream
+  labels (md h3 kit labels, step eyebrow) moved to stone-600 (7.0:1).
+  DESIGN.md corrected (ink/cream measures 16.2:1; motif and step-tab intent
+  lines updated to match shipped styling). Post-fix: 0 below-AA text nodes
+  on all 6 audited pages in all three engines.
+- **Cross-browser** (`QA_PRODUCTION=1`, `QA_BROWSER=<engine>`): Chromium full
+  pass; Firefox full pass with zero client errors; WebKit full functional
+  pass — a WebKit engine bug (same-origin RSC prefetch fetches with custom
+  headers on non-standard ports are misrouted through access-control checks)
+  logged 50 prefetch pageerrors, filtered by a narrow documented pattern
+  (`due to access control checks` + `_rsc=`, WebKit only) and reported in
+  the run output; any other error still fails the suite; navigations were
+  verified via fallback. Playwright WebKit is not release Safari; the
+  real-Safari check stays deferred.
+
+Amends the Phase-3 deferred list above: automated ARIA/contrast and
+non-Chromium engine coverage are now closed; still deferred — real-device
+touch, real screen-reader run, release-Safari/Chrome-on-iOS, and human
+pixel inspection of `docs/qa/phase3/`.
 
 ## Phase 2 sign-off (2026-09-17) — supersedes S05 (2026-09-11) for its record
 
