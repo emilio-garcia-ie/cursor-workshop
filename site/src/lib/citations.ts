@@ -15,8 +15,17 @@ const KNOWN_DIAGRAMS = [
   "10-hearthline-domains",
 ];
 
-/** `[12]` → clickable `[12](/bibliography#12)` (styling makes them superscript). */
-export function linkCitations(body: string): string {
+function bibPrefix(locale: string): string {
+  return locale === "es" ? "/es/bibliography#" : "/bibliography#";
+}
+
+function stepsPrefix(locale: string): string {
+  return locale === "es" ? "/es/steps/" : "/steps/";
+}
+
+/** `[12]` → clickable `[12](/bibliography#12)` (styling makes them superscript). ES prefixes with `/es`. */
+export function linkCitations(body: string, locale: string = "en"): string {
+  const href = bibPrefix(locale);
   const tree = unified().use(remarkParse).parse(body);
   const ranges: { start: number; end: number }[] = [];
   const visit = (node: RootContent) => {
@@ -27,14 +36,15 @@ export function linkCitations(body: string): string {
   tree.children.forEach(visit);
   let result = body;
   for (const { start, end } of ranges.reverse()) {
-    result = result.slice(0, start) + body.slice(start, end).replace(/(?<!\\)\[(\d{1,2})\](?![\]\(])/g, "[$1](/bibliography#$1)") + result.slice(end);
+    result = result.slice(0, start) + body.slice(start, end).replace(/(?<!\\)\[(\d{1,2})\](?![\]\(])/g, `[$1](${href}$1)`) + result.slice(end);
   }
   return result;
 }
 
-/** Glossary `](steps/NN-slug.md)` → `](/steps/NN-slug)`. */
-export function fixStepLinks(body: string): string {
-  return body.replace(/\]\(steps\/([^)]+?)\.md\)/g, "](/steps/$1)");
+/** Glossary `](steps/NN-slug.md)` → `](/steps/NN-slug)` (or `/es/steps/...`). */
+export function fixStepLinks(body: string, locale: string = "en"): string {
+  const prefix = stepsPrefix(locale);
+  return body.replace(/\]\(steps\/([^)]+?)\.md\)/g, `](${prefix}$1)`);
 }
 
 /** Diagram slugs referenced by name in a step body. */

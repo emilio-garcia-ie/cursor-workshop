@@ -11,6 +11,7 @@ export interface StepTab {
 const labels = new Map([
   ["The project", "the-project"], ["Learn", "learn"], ["Implement", "implement"],
   ["Pro tips", "pro-tips"], ["Terminology", "terminology"], ["Advanced", "advanced"],
+  ["Quiz", "quiz"],
 ]);
 
 export function splitStepTabs(body: string): StepTab[] {

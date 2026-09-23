@@ -1,0 +1,86 @@
+en,es,note
+operator console,consola del operador,product surface name
+Hearthline,Hearthline,brand; do not translate
+Cursor,Cursor,brand; do not translate
+ticket,ticket,keep English ticket identifiers; noun may render as "ticket"
+acceptance criteria,criterios de aceptación,HLN contract term
+planted bug,defecto plantado,workshop concept
+integer cents,centavos enteros,money convention
+in-memory store,almacén en memoria,console architecture
+seed,semilla,deterministic data
+hook,hook,Cursor mechanism; keep English
+skill,skill,Cursor mechanism; keep English
+subagent,subagente,Cursor mechanism
+agent,agente,context-dependent
+rule,regla,project rules
+rules file,archivo de reglas,.cursor/rules
+Plan Mode,modo Plan,Cursor feature name
+Custom Mode,modo personalizado,Cursor feature name
+Auto mode,modo Auto, Cursor routing feature
+expected result,resultado esperado,exercise kit subsection
+self-report,autoinforme,progress concept
+knowledge check,comprobación de conocimiento,quiz section
+progress,progreso,learner state
+export,exportar,payments feature
+export columns,columnas de exportación,HLN-101
+default columns,columnas predeterminadas,HLN-101
+sensitive fields,campos sensibles,HLN-101
+CSV escape,escape de CSV,csv helper
+comparator,comparador,sort logic
+bucketing,agrupamiento,UTC time bucketing
+timezone,zona horaria,time convention
+delinquency,morosidad,dashboard metric
+occupancy,ocupación,dashboard metric
+work order,orden de trabajo,maintenance
+renewal,renovación,leasing
+lease,arrendamiento,domain concept
+property,propiedad,domain concept
+Forecasts,Pronósticos,screen name; keep as Pronósticos
+Dashboard,Panel,pantalla; may render as Panel
+Payments,Pagos,screen name
+Maintenance,Mantenimiento,screen name
+Properties,Propiedades,screen name
+Inspections,Inspecciones,build battle feature
+marketplace,marketplace,Cursor concept; keep English
+plugin,plugin,Cursor packaging; keep English
+readonly,solo lectura,agent frontmatter flag
+failClosed,failClosed,hook config key; keep literal
+exit code,código de salida,hook semantics
+fail open,fallo abierto,hook semantics
+knowledge graph,grafo de conocimiento,step 24
+headless,sin interfaz,CLI mode; or "en segundo plano"
+print mode,modo print,CLI flag; keep literal
+vision-capable,capaz de visión,image input
+artifact,artefacto,generated output
+prompt,prompt,keep English in technical use
+worktree,worktree,git concept; keep English
+branch,rama,git concept
+checkout,checkout,git concept; keep English
+diff,diff,keep English
+regression test,prueba de regresión,TDD
+characterization test,prueba de caracterización,TDD
+RED,RED,TDD phase; keep literal
+GREEN,GREEN,TDD phase; keep literal
+harness,arnés,workshop organizing model
+governance,gobernanza,security step
+trust boundary,frontera de confianza,security
+allowlist,lista de permitidos,security
+telemetry,telemetría,privacy
+privacy mode,modo de privacidad,Cursor setting
+workspace,espacio de trabajo,Cursor surface
+composer,composer,Cursor surface; keep English
+side chat,chat lateral,Cursor feature
+image generation,generación de imágenes,tool capability
+canvas,canvas,Cursor artifact; keep English
+variable,variable,template concept
+pipeline,canalización,process
+playbook,playbook,keep English in GTM context
+voice,voz,messaging style
+outreach,acercamiento,GTM
+cohort,cohorte,measurement
+worksheet,hoja de trabajo,measurement
+rubric,rúbrica,evaluation
+stop condition,condición de parada,safety
+spend ceiling,límite de gasto,cost guard
+usage,uso,billing
+rate,tarifa,billing

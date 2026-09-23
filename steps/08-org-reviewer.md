@@ -102,9 +102,9 @@ A request the model simply declines is not proof a tool-level restriction ran.
 
 #### Expected result
 
-An evidence-backed report, no reviewer-written feature diff, and a clearly
-labeled restriction result: observed block, failed restriction, or not
-exercised. Source support alone is not runtime acceptance.
+You have an evidence-backed review report and a clearly labeled restriction
+result (observed block, failed restriction, or not exercised), and the
+reviewer has not written any feature diff.
 
 [SCREENSHOT: Reviewer configuration and numbered finding with file:line evidence; separate unchanged-file restriction check]
 
@@ -142,7 +142,53 @@ agents have their own reference format[35]; do not assume this local
 restriction test proves readonly survives packaging and another user's
 installation. That integration remains outside this kit.
 
+## Quiz
+
+#### Q1: What does readonly: true do for a subagent?
+
+- [ ] It makes every report correct
+- [ ] It removes all MCP tools
+- [x] It restricts file edits and state-changing shell commands
+- [ ] It creates a separate checkout automatically
+
+**Explanation:** readonly: true restricts writes and state-changing shell commands; it does not validate conclusions or certify inherited remote tools.
+
+#### Q2: Where is the org-standards reviewer defined?
+
+- [ ] docs/ORG-STANDARDS.md
+- [x] .cursor/agents/org-standards.md
+- [ ] .cursor/rules/root.mdc
+- [ ] .cursor/hooks.json
+
+**Explanation:** Subagent definitions live in .cursor/agents/ with Markdown body and YAML frontmatter.
+
+#### Q3: Why must the parent still inspect the report before authorizing fixes?
+
+- [ ] Because the reviewer refuses to read diffs
+- [x] Because readonly restricts writes, not report correctness, and standards become reviewable criteria rather than enforced truth
+- [ ] Because the reviewer edits feature files
+- [ ] Because parent tools are disabled
+
+**Explanation:** Readonly restricts writes, not validation; a parent must inspect the report and its cited evidence before authorizing fixes.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Giving each finding an evidence requirement
+- [ ] Recording a blocker rather than guessing
+- [x] Writing readonly as a Markdown bullet instead of YAML frontmatter
+- [ ] Verifying the file stayed unchanged
+
+**Explanation:** The starter's "- readonly: true" bullet is prose; use the documented YAML boolean in frontmatter.
+
+#### Q5: How must the restriction result be labeled?
+
+- [ ] Passed or failed only
+- [ ] Hidden from the report
+- [x] Observed block, failed restriction, or not exercised
+- [ ] Estimated from the model's wording
+
+**Explanation:** The restriction result is labeled observed block, failed restriction, or not exercised, and the reviewer has written no feature diff.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

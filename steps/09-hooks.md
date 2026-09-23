@@ -141,7 +141,8 @@ when finished, preserving anything that existed before the exercise.
 #### Solution approach
 
 Use this documentation-backed matrix[5]; fill an **Observed** column yourself.
-An unrun case stays “not exercised,” never “passed.”
+An unrun case stays “not exercised,” never “passed.” Build the matrix from
+runtime observation; local docs or site lint cannot substitute for it.
 
 | Fixture | Exit/output | failClosed false | failClosed true |
 |---|---|---|---|
@@ -160,9 +161,9 @@ exit/output, and hook diagnostic. Do not broaden the enforcement claim.
 
 #### Expected result
 
-A completed or explicitly blocked seven-case matrix demonstrating the
-separation between success, permission, and failure policy. Local docs or
-site lint cannot substitute for this runtime evidence.
+You have a completed or explicitly blocked seven-case matrix, and it
+demonstrates the separation between success, permission, and failure policy
+from runtime observation.
 
 [SCREENSHOT: Harmless marker denied by the hook, with matching fixture and expected/observed matrix]
 
@@ -176,7 +177,7 @@ site lint cannot substitute for this runtime evidence.
   Test only covered Cursor events; use independent repository controls for
   a broader release policy[5].
 
-### Working habits
+### Pro tips
 
 - **Pro tip 1:** Use a harmless marker for failure tests, never an actual push.
 - **Pro tip 2:** Keep direct script tests separate from Cursor event tests;
@@ -197,7 +198,53 @@ a writable environment, not early read-only turns, and local home-directory
 hooks are unavailable there[31]. Do not infer universal enforcement or
 multi-source merge behavior from this single-source local exercise[5][7].
 
+## Quiz
+
+#### Q1: What does exit 0 from a beforeShellExecution hook mean?
+
+- [ ] Unconditional permission to run
+- [ ] The push always proceeds
+- [x] Successful execution that may consume a JSON permission decision; it is not unconditional permission
+- [ ] The hook always blocks
+
+**Explanation:** Exit 0 means successful execution and may consume a JSON permission decision; it is not unconditional permission.
+
+#### Q2: Where are project hooks configured?
+
+- [ ] .cursor/rules/hooks.json
+- [x] .cursor/hooks.json with version: 1
+- [ ] package.json
+- [ ] .github/workflows/
+
+**Explanation:** Project hooks live in .cursor/hooks.json with version: 1; user-level hooks are a separate location.
+
+#### Q3: Why must exit 2 and other non-zero exits be distinguished?
+
+- [x] Because exit 2 blocks while other non-zero exits fail open by default unless failClosed is true
+- [ ] Because exit 2 allows the shell command
+- [ ] Because all non-zero exits are identical
+- [ ] Because exit 2 is the only valid exit
+
+**Explanation:** Exit 2 blocks; other non-zero exits fail open by default unless failClosed: true is set.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Setting failClosed explicitly in each run
+- [ ] Using a harmless marker for failure tests
+- [x] Treating a Cursor hook as a Git server-side guarantee
+- [ ] Recording both the JSON permission and exit status
+
+**Explanation:** A Cursor hook gates covered Cursor shell events only, not all Git commands or pushes from an external terminal.
+
+#### Q5: What does the expected result require?
+
+- [ ] A merged push with tests passing
+- [x] A completed or explicitly blocked seven-case matrix from runtime observation
+- [ ] A new rule in root.mdc
+- [ ] A failing money test
+
+**Explanation:** The deliverable is a completed or explicitly blocked seven-case matrix demonstrating the separation of success, permission, and failure policy.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

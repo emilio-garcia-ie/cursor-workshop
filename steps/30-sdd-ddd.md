@@ -28,7 +28,9 @@ invent a cron API or silently add infrastructure.
 
 ### Exercise kit — an implementable boundary decision
 
-**Starter input:** Read `docs/tickets/HLN-103.md`,
+#### Starter code path
+
+Read `docs/tickets/HLN-103.md`,
 `.cursor/rules/boundaries.mdc`, `.cursor/skills/spec/SKILL.md`, and the public
 Property, Leasing, and Operations indexes. Use the existing spec playbook as
 reference; do not assume this legacy file has valid skill frontmatter or that
@@ -42,12 +44,6 @@ you find its implementation. Include recurrence, duplicate-run, timezone, and
 approval decisions. Do not implement, schedule jobs, or change the shared baseline.
 ```
 
-**Worked example:** "Create a quarterly inspection" is ambiguous without a
-calendar anchor, property timezone, and duplicate-run policy. A useful proposed
-contract specifies a stable occurrence identity such as property + schedule +
-due day; that is a design proposal, not an existing schema. It must state what
-happens when the same scheduled event is processed twice.
-
 1. Write requirements with observable outcomes and explicit open decisions.
    Distinguish move-in/out events from quarterly/annual recurrence.
 2. Draw an import-direction table: proposed Inspections owns inspection state;
@@ -59,40 +55,115 @@ happens when the same scheduled event is processed twice.
 4. Ask the reviewer to check only the spec and boundary map. Resolve unsupported
    assumptions in the files; stop before implementation approval.
 
-**Expected deliverable:** Three learner spec files, an integration map, test
-matrix, and unresolved-prerequisite list. No domain implementation, cron job,
-new dependency, or planted-bug repair belongs in this exercise.
+#### Expected diff
 
-**Hints:** Read exports rather than guessing from a domain name. Requirements
-can be precise while leaving a dependency blocked; that is better than fake code.
+Three learner spec files, an integration map, test matrix, and
+unresolved-prerequisite list. No domain implementation, cron job, new
+dependency, or planted-bug repair belongs in this exercise.
 
-**Solution:** A defensible design keeps Inspections separate, proposes tests for
-one occurrence, duplicate delivery, and property-local scheduling, and refuses
-to fabricate the job runner. Tasks independent of that runner can be reviewed;
-implementation remains gated on explicit approval and resolved contracts.
+#### Hints
+
+- Read exports rather than guessing from a domain name.
+- Requirements can be precise while leaving a dependency blocked; that is better
+  than fake code.
+
+#### Solution approach
+
+"Create a quarterly inspection" is ambiguous without a calendar anchor, property
+timezone, and duplicate-run policy. A useful proposed contract specifies a
+stable occurrence identity such as property + schedule + due day; that is a
+design proposal, not an existing schema. It must state what happens when the
+same scheduled event is processed twice. A defensible design keeps Inspections
+separate, proposes tests for one occurrence, duplicate delivery, and
+property-local scheduling, and refuses to fabricate the job runner. Tasks
+independent of that runner can be reviewed; implementation remains gated on
+explicit approval and resolved contracts.
+
+#### Expected result
+
+You have three learner spec files with an integration map and an
+unresolved-prerequisite list, and no implementation, cron job, or shared-baseline
+change was made.
 
 > Screenshot placeholder: requirement-to-task map beside public-domain imports
 > and the visibly unresolved scheduler dependency.
 
+#### Stretch goal
+
+Compare a rejected design that puts Inspections inside Property with the
+separate-domain proposal. Explain ownership, duplicate prevention, and
+integration tradeoffs using actual exports; avoid claiming rules alone will
+enforce the chosen architecture[1].
+
 ## Pro tips
 
-- Mark each API as existing or proposed in the design itself.
-- Resolve acceptance changes in the spec before asking a worker to code around them.
+- **Pro tip 1:** Mark each API as existing or proposed in the design itself.
+- **Pro tip 2:** Resolve acceptance changes in the spec before asking a worker
+  to code around them.
 
 ### Common mistakes
 
-- Implementing immediately despite the spec playbook's approval gate.
-- Importing another domain's internal service because its public API is inconvenient.
-- Treating a ticket's "existing job runner" phrase as proof of an available implementation.
+- **Mistake 1:** Implementing immediately despite the spec playbook's approval
+  gate.
+- **Mistake 2:** Importing another domain's internal service because its public
+  API is inconvenient.
+- **Mistake 3:** Treating a ticket's "existing job runner" phrase as proof of an
+  available implementation.
 
 ## Advanced
 
-**Stretch:** Compare a rejected design that puts Inspections inside Property
-with the separate-domain proposal. Explain ownership, duplicate prevention,
-and integration tradeoffs using actual exports; avoid claiming rules alone
-will enforce the chosen architecture[1].
+A spec is a contract for review, not a license to build. The boundary map and
+the unresolved scheduler row are the honest surface of the design; approving
+code before those rows are resolved moves the decision into the diff, where it
+is expensive to change.
+
+## Quiz
+
+#### Q1: What does spec-driven development make explicit before implementation in this workshop?
+
+- [ ] The deployment date
+- [x] Acceptance criteria
+- [ ] The model name
+- [ ] The marketing copy
+
+**Explanation:** Spec-driven development makes acceptance explicit before implementation, while domain boundaries determine where that behavior belongs.
+
+#### Q2: Which rules file names the domain boundaries for the console?
+
+- [ ] .cursor/rules/root.mdc
+- [x] .cursor/rules/boundaries.mdc
+- [ ] .cursor/rules/components.mdc
+- [ ] .cursor/hooks.json
+
+**Explanation:** The starter code path reads .cursor/rules/boundaries.mdc, which names Property, Leasing, Operations, and Payments.
+
+#### Q3: Why must the job runner mentioned in HLN-103 be treated as an unresolved prerequisite?
+
+- [ ] Because tickets never mention existing infrastructure
+- [ ] Because the runner is private to Maya
+- [x] Because the inspected source does not establish such a runner
+- [ ] Because cron is disabled in the console
+
+**Explanation:** HLN-103 mentions an existing job runner, but the inspected source does not establish one, so its identity and interface stay unresolved.
+
+#### Q4: Which action is called out as a common mistake when a public API is inconvenient?
+
+- [ ] Asking the reviewer to check only the spec
+- [x] Importing another domain's internal service
+- [ ] Listing the missing API as a proposed change
+- [ ] Marking the scheduler row blocked
+
+**Explanation:** Importing another domain's internal service because its public API is inconvenient is mistake 2.
+
+#### Q5: Which deliverable belongs to this step's expected result?
+
+- [ ] A scheduled cron job for inspections
+- [ ] A repaired planted bug
+- [x] Three learner spec files with an integration map and unresolved-prerequisite list
+- [ ] A merged implementation branch
+
+**Explanation:** The expected result is three learner spec files, an integration map, and an unresolved-prerequisite list, with no implementation or cron job.
 
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

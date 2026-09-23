@@ -17,6 +17,34 @@ export const PERSONAS = [
 ] as const;
 export type Persona = (typeof PERSONAS)[number];
 
+/** Display labels for persona filter buttons (ES localized; EN identity). */
+export const PERSONA_LABELS_ES: Record<string, string> = {
+  vibecoders: "vibecoders",
+  developers: "desarrolladores",
+  "data-scientists": "científicos de datos",
+  "ai-engineers": "ingenieros de IA",
+  "forward-deployed": "forward-deployed",
+};
+
+/** Display labels for module names (ES localized; EN identity). */
+export const MODULE_LABELS_ES: Record<string, string> = {
+  Foundations: "Fundamentos",
+  Building: "Construcción",
+  Guardrails: "Salvaguardias",
+  "The Fast Loop": "El bucle rápido",
+  "Debug & Test": "Depuración y pruebas",
+  "Team & Scale": "Equipo y escala",
+  Bonus: "Extra",
+};
+
+export function personaLabel(locale: string, persona: string): string {
+  return locale === "es" ? PERSONA_LABELS_ES[persona] ?? persona : persona;
+}
+
+export function moduleLabel(locale: string, module: string): string {
+  return locale === "es" ? MODULE_LABELS_ES[module] ?? module : module;
+}
+
 export const PERSONA_STEPS: Record<Persona, number[]> = {
   vibecoders: [1, 2, 3, 5, 16, 17, 21, 23],
   developers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21, 22],

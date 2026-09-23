@@ -91,9 +91,9 @@ outputs only after this classification, so novelty does not choose for you.
 
 #### Expected result
 
-Five justified choices and one rejected alternative for each. For the
-three-run comparison, an honest gap is a valid result; no mechanism earns
-an automatic correctness or enforcement guarantee.
+You have five justified mechanism choices with one rejected alternative for
+each, and the three-run comparison records any honest gap rather than an
+automatic correctness or enforcement guarantee.
 
 [SCREENSHOT: Five-mechanism decision table beside the three-run comparison with missing evidence marked]
 
@@ -105,7 +105,7 @@ an automatic correctness or enforcement guarantee.
 - **Mistake 3:** Assuming local configuration follows every runtime. Verify
   scope, team policy, and surface-specific availability before rollout.
 
-### Working habits
+### Pro tips
 
 - **Pro tip 1:** Choose one owner and one observable outcome per mechanism.
 - **Pro tip 2:** Compare on the same diff; changed inputs invalidate a
@@ -133,7 +133,53 @@ early read-only turns and do not receive local home-directory hooks[31].
 These qualifications matter when choosing a runtime; none is a mandatory
 integration for this reading-only step.
 
+## Quiz
+
+#### Q1: Which mechanism fits the convention "money must be integer cents"?
+
+- [ ] A hook
+- [ ] A subagent
+- [x] A rule
+- [ ] An MCP server
+
+**Explanation:** A convention like integer cents is guidance, so a rule supplies applicable context; it is not an execution gate.
+
+#### Q2: Where does Agent Review find organization-specific instructions?
+
+- [ ] .cursor/agents/
+- [x] BUGBOT.md
+- [ ] .cursor/hooks.json
+- [ ] docs/tickets/
+
+**Explanation:** Agent Review reads repository BUGBOT.md rules and offers Quick and Deep depths with different cost levels.
+
+#### Q3: Why should a team choose the missing capability rather than the most impressive mechanism name?
+
+- [ ] Because names determine cost
+- [ ] Because newer mechanisms always win
+- [x] Because each mechanism has one job, and a rule, connection, or hook cannot substitute for the capability that is actually missing
+- [ ] Because only subagents can be reviewed
+
+**Explanation:** A rule can describe a review without performing one, and a connection can retrieve a PR without authorizing a merge; pick the missing capability.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Comparing on the same diff
+- [x] Using a rule as proof a check ran
+- [ ] Recording missing test output as unverified
+- [ ] Choosing one owner per mechanism
+
+**Explanation:** A rule is guidance, not proof of execution; require actual output before claiming a check ran.
+
+#### Q5: What does the expected result require?
+
+- [x] Five justified mechanism choices with one rejected alternative each
+- [ ] A merged configuration for all five mechanisms
+- [ ] A token usage figure for every run
+- [ ] A sixth mechanism added to the matrix
+
+**Explanation:** The deliverable is five justified choices, each with a rejected alternative, and an honest three-run comparison that records gaps.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

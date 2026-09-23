@@ -108,11 +108,10 @@ consideration. Review the proposal without executing a guessed hash or mainline.
 
 #### Expected result
 
-A feature PR draft and a separate tooling draft when tooling changes exist,
-with business impact, scoped diffs, actual check output, explicitly not-done
-items, and a reviewed rollback proposal. Missing tooling remains not done.
-The core outcome is “reviewed locally, not shipped”; local approval is not
-permission to publish. No push or deployment is needed to complete this kit.
+You have a reviewed feature PR draft and a separate tooling draft where
+tooling changes exist, each with business impact, scoped diffs, actual check
+output, explicitly not-done items, and a rollback proposal, and every check
+is marked only with evidence.
 
 [SCREENSHOT: Local feature draft and tooling draft or not-done entry, with verification outputs and rollback owner]
 
@@ -155,7 +154,53 @@ Cursor event hook; Git/server-side controls are separate. No hook runtime gate
 is claimed here. A future commit, push, PR submission, merge, or deployment
 requires its own explicit approval and actual evidence, outside this core kit.
 
+## Quiz
+
+#### Q1: What does the core exercise end with?
+
+- [ ] A merged pull request
+- [ ] A deployed feature
+- [x] Local review and approval, not publication
+- [ ] A pushed branch
+
+**Explanation:** The core exercise ends with local review and approval; commit, push, PR, merge, and deploy stay unapproved.
+
+#### Q2: Where must the preflight checks run?
+
+- [ ] The workshop site's directory
+- [x] The intended learner console checkout
+- [ ] A new external repository
+- [ ] A CI pipeline on GitHub
+
+**Explanation:** The preflight uses the console's own scripts in the learner checkout, not the workshop site's checks.
+
+#### Q3: Why must the tooling changes be kept out of the feature story?
+
+- [ ] Because tooling files never pass lint
+- [ ] Because HLN-102 requires them
+- [x] Because Priya must approve the exact feature diff and tooling proposals need their own evidence
+- [ ] Because worktrees forbid edits
+
+**Explanation:** Review separate file lists; mixing tooling with the customer feature conflates two approval stories and risks scooping up unrelated work.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Reading working and staged diffs too
+- [ ] Rerunning approved checks after the final fix
+- [x] Calling a build log a deployment
+- [ ] Drafting a rollback with an owner
+
+**Explanation:** Record local approval, publishing, and post-release checks separately; a build log is not a deployment.
+
+#### Q5: What must every check in the PR drafts be marked with?
+
+- [ ] The draft's word count
+- [ ] The reviewer's opinion
+- [x] Actual evidence from the run, with not-done items explicit
+- [ ] The date of the ticket
+
+**Explanation:** Each check is marked only with evidence; not-done items are explicit and the rollback proposal records owner, signal, and trigger.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

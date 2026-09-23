@@ -26,6 +26,10 @@ describe("curriculum rendering and filter regressions", () => {
     expect(result).toContain("[4](https://example.com/docs)");
     expect(result).toContain("![5](/image.svg)");
     expect(linkCitations(result)).toBe(result);
+    const es = linkCitations(body, "es");
+    expect(es).toContain("Claim[1](/es/bibliography#1)");
+    expect(es).toContain("**fact[2](/es/bibliography#2)**");
+    expect(linkCitations(es, "es")).toBe(es);
   });
 
   it("keeps diagram references discoverable inside their parsed sections", () => {

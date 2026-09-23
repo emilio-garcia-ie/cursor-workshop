@@ -42,3 +42,17 @@ Recorded: 2026-09-11. Source: inspection of /Users/emilio/Documents/cursor-train
   `eslint@9` + flat config, `vitest@4.1.11`. Audit now reports 0
   vulnerabilities. See QA-SIGNOFF.md (Dependency remediation).
 - Console BUILD-BASELINE E02 pins remain authoritative for the console.
+
+## E03 Phase-3 state (2026-09-23)
+
+- Workshop site stack unchanged from the Phase-2 supersession (next@16.3.5 /
+  react@19 / vitest@4.1.11); clean-install `npm audit` remains 0.
+- Console remains on next@14.2.35 / react@18 (E02 pins). New advisories
+  published since 2026-09-17 now report 7 findings (next DoS/smuggling,
+  bundled PostCSS file-read, glob via eslint-config-next, @vitest/mocker via
+  vitest 3). 14.2.35 is the final 14.x (`next-14` dist-tag), so no
+  non-breaking remediation exists; upgrade is a future, user-approved
+  migration. See QA-SIGNOFF.md (Dependency status).
+- ES content contract: steps/es + glossary/bibliography/fact-check `.es.md`
+  files, termbase-checked (`npm run check:termbase`) and anchor-parity-checked
+  (`npm run check:anchors`), both green 2026-09-23.

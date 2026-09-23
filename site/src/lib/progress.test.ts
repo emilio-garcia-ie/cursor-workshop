@@ -197,4 +197,22 @@ describe("progress v2 contract", () => {
     expect(state.steps["01-day-one"].legacy?.complete).toBe(true);
     expect(m.summarize(state, catalog).earned).toBe(0);
   });
+
+  describe("quiz persistence", () => {
+    it("stores a graded quiz attempt and round-trips through export/import", () => {
+      const m = model();
+      const state = m.setQuiz(m.emptyProgress(), catalog, "01-day-one", [0, 1, 2, 0, 3], 4);
+      expect(state.quiz?.["01-day-one"]).toEqual({ answers: [0, 1, 2, 0, 3], score: 4, graded: true });
+      const imported = m.importProgress(m.exportProgress(state, catalog), catalog);
+      expect(imported.quiz).toEqual(state.quiz);
+    });
+
+    it("rejects malformed quiz attempts", () => {
+      const m = model();
+      expect(() => m.setQuiz(m.emptyProgress(), catalog, "01-day-one", [0], 1.5)).toThrow(/score/);
+      expect(() => m.setQuiz(m.emptyProgress(), catalog, "01-day-one", [-1], 1)).toThrow(/answers/);
+      expect(() => m.importProgress('{"version":2,"steps":{},"quiz":{"01-day-one":{"answers":[0],"score":1,"graded":"yes"}}}', catalog)).toThrow(/quiz/);
+      expect(() => m.importProgress('{"version":2,"steps":{},"quiz":{"01-day-one":{"answers":[0],"score":1,"graded":true},"unknown":{"answers":[0],"score":1,"graded":true}}}', catalog)).toThrow(/Unknown step/);
+    });
+  });
 });

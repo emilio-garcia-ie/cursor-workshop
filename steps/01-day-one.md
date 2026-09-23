@@ -103,9 +103,10 @@ an investigation starting point, not a solution you have already verified.
 
 #### Expected result
 
-Your handoff covers selectable columns, sensitive fields excluded by
-default, requested order, and an empty file for empty selection. It also
-explains why exporting only the visible table page is insufficient.
+You have a three-line handoff that covers selectable columns, sensitive
+fields excluded by default, requested order, and an empty file for empty
+selection, and it explains why exporting only the visible table page is
+insufficient.
 
 [SCREENSHOT: HLN-101 beside the three-line handoff, with the server-side export note visible]
 
@@ -131,7 +132,53 @@ explains why exporting only the visible table page is insufficient.
 Explain the same ticket once to Jordan without implementation jargon and
 once to Priya with the server-side constraint. Neither version may add scope.
 
+## Quiz
+
+#### Q1: What is Hearthline's operator console?
+
+- [ ] A public website customers use to pay rent
+- [x] An internal tool staff use to watch money move for property-management customers
+- [ ] A data-science notebook environment
+- [ ] A property listing marketplace
+
+**Explanation:** The operator console is the internal tool staff use to watch money move for small businesses that collect rent.
+
+#### Q2: Which screen does not exist yet?
+
+- [ ] Payments
+- [ ] Forecasts
+- [x] Inspections
+- [ ] Maintenance
+
+**Explanation:** Inspections, scheduled inspections with checklists and photos, is the screen that does not exist yet and becomes the Build Battle.
+
+#### Q3: Why should the money and time conventions be treated as constraints on HLN-101 rather than a license to repair every planted bug?
+
+- [ ] Because fixing planted bugs is forbidden in the workshop
+- [x] Because the ticket defines a bounded change and the conventions support it, not a mandate to repair unrelated defects during onboarding
+- [ ] Because money and time conventions are optional guidance
+- [ ] Because only Maya may touch money code
+
+**Explanation:** HLN-101 is the export options ticket; money and time conventions constrain that work, not permission to repair every planted bug.
+
+#### Q4: What is the correct deliverable for day one?
+
+- [ ] A fully implemented export dialog
+- [ ] A surprise feature branch
+- [x] A three-line handoff that summarizes the ticket and its evidence
+- [ ] A list of every bug in the codebase
+
+**Explanation:** Day one's deliverable is an accurate three-line handoff, not a surprise feature branch.
+
+#### Q5: Which item must the three-line handoff cover?
+
+- [ ] A full audit of all planted bugs
+- [ ] A rewrite of the payments page
+- [x] Why exporting only the visible table page is insufficient
+- [ ] A server-side export implementation
+
+**Explanation:** The handoff must explain why exporting only the visible table page is insufficient, alongside the ticket's column and sensitivity points.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

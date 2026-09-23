@@ -8,12 +8,13 @@ function split(body: string) {
 
 describe("step tabs contract", () => {
   it.each([
-    [1, ["The project", "Implement"]],
-    [2, ["Learn", "Implement", "Pro tips", "Advanced"]],
-    [9, ["Learn", "Implement", "Advanced"]],
-    [10, ["Learn", "Implement", "Advanced"]],
-    [11, ["Learn", "Implement", "Terminology", "Advanced"]],
-    ...[12, 13, 14, 15, 31, 32, 33].map(n => [n, ["Learn", "Implement"]]),
+    [1, ["The project", "Implement", "Quiz"]],
+    [2, ["Learn", "Implement", "Pro tips", "Advanced", "Quiz"]],
+    [9, ["Learn", "Implement", "Advanced", "Quiz"]],
+    [10, ["Learn", "Implement", "Advanced", "Quiz"]],
+    [11, ["Learn", "Implement", "Terminology", "Advanced", "Quiz"]],
+    ...[12, 13, 14, 15].map(n => [n, ["Learn", "Implement", "Quiz"]]),
+    ...[31, 32, 33].map(n => [n, ["Learn", "Implement", "Quiz"]]),
   ])("honors step %s schema", (number, labels) => {
     const step = getSteps().find(s => s.step === number)!;
     expect(split(step.body).map(t => t.label)).toEqual(labels);

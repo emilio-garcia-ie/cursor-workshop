@@ -65,6 +65,9 @@ the four domains (Property, Leasing, Operations, Payments), the tech stack,
 and where the payments export flows end to end.
 ```
 
+Investigate before you edit: the answer names the seams your HLN-101 change
+will touch, so Step 5's plan has somewhere to land.
+
 ### Exercise kit
 
 #### Starter code path
@@ -114,9 +117,10 @@ before asking for a feature plan.
 
 #### Expected result
 
-All five screens are reachable. The explicit export request should return
-HTTP 200 and begin with `status,id`; save the actual status/header and test
-summary, or the exact blocker. Do not repair baseline failures incidentally.
+You have the console running with all five screens reachable, and the
+explicit export request returns HTTP 200 beginning with `status,id`, with
+the actual status, header, and test summary saved (or the exact blocker
+recorded).
 
 [SCREENSHOT: Payments screen beside the terminal's branch name, test summary, and CSV response header]
 
@@ -160,7 +164,53 @@ Origin as source of truth; synced GitHub repositories keep GitHub as source
 of truth[36]. This workshop still uses the GitHub case-study workflow; no
 hosting migration is required.
 
+## Quiz
+
+#### Q1: How does Hearthline store money?
+
+- [ ] Floating-point dollars
+- [x] Integer cents
+- [ ] Decimal strings
+- [ ] Percentage points
+
+**Explanation:** Money is integer cents; every planted bug breaks this convention or the UTC convention.
+
+#### Q2: Which file is the payments export endpoint?
+
+- [ ] src/app/payments/page.tsx
+- [x] src/app/api/payments/export/route.ts
+- [ ] src/lib/csv.ts
+- [ ] README.md
+
+**Explanation:** The export endpoint lives at src/app/api/payments/export/route.ts, one of the files to review before approving installation.
+
+#### Q3: Why does every learner see identical records and identical bugs?
+
+- [ ] Because a production database is shared
+- [x] Because an in-memory store is seeded deterministically at boot
+- [ ] Because production data is copied locally
+- [ ] Because the dev server generates random data
+
+**Explanation:** Data lives in an in-memory store seeded deterministically at boot, so every learner gets identical records and identical bugs.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Reading the ticket with an @ reference
+- [ ] Branching before the first edit
+- [x] Running setup in the workshop site's directory
+- [ ] Keeping a second terminal for probes
+
+**Explanation:** Running install in cursor-workshop/site is a common mistake; run commands in your clone, not the site directory.
+
+#### Q5: What counts as the expected result for the read-only probe?
+
+- [ ] A browser page that loads
+- [ ] A passing npm test
+- [x] An HTTP 200 response beginning with status,id, with the actual status, header, and test summary saved
+- [ ] A new file created in the app
+
+**Explanation:** The explicit export request must return HTTP 200 beginning with status,id and the evidence must be saved, or the exact blocker recorded.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

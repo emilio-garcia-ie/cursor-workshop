@@ -101,9 +101,9 @@ screenshot of valid JSON.
 
 #### Expected result
 
-A real PR list, including an honestly empty list, or a clearly recorded
-connection/permission blocker. No write operation is required to pass this
-kit; the publishing action above waits for Step 11's approval.
+You have a real read-only PR list for your fork, including an honestly empty
+list, or a clearly recorded connection/permission blocker, and no write
+operation has been performed.
 
 [SCREENSHOT: Customize MCP connection and sanitized read-only PR result; no token or Authorization header visible]
 
@@ -142,7 +142,53 @@ marketplace, but linking alone does not install or enable them for everyone[28].
 MCP also supports resources, prompts, and interactive MCP Apps; this exercise
 needs only a read-only tool call, not another server installation[3].
 
+## Quiz
+
+#### Q1: What are the two transport shapes for MCP servers?
+
+- [ ] Public and private
+- [ ] Free and paid
+- [x] Local STDIO and remote URL
+- [ ] Push and pull
+
+**Explanation:** Local STDIO uses type stdio with command and optional args; remote uses a URL and the server's authentication scheme.
+
+#### Q2: Where is the GitHub connection configured?
+
+- [ ] .cursor/rules/mcp.json
+- [x] .cursor/mcp.json with an mcpServers wrapper
+- [ ] package.json
+- [ ] docs/tickets/HLN-101.md
+
+**Explanation:** MCP connects via .cursor/mcp.json with an mcpServers wrapper; the GitHub connection uses the documented endpoint and environment interpolation.
+
+#### Q3: Why must the token be interpolated from the environment rather than hardcoded?
+
+- [ ] Because JSON cannot hold strings
+- [ ] Because GitHub requires a URL
+- [x] Because hardcoding risks committing a credential into the repo and the PR
+- [ ] Because environment interpolation is faster
+
+**Explanation:** Secrets come from the environment with ${env:NAME} and are never hardcoded, so credentials stay out of config and the PR.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Keeping the first request read-only
+- [ ] Inspecting git diff of mcp.json before sharing
+- [ ] Treating a denied call as a permissions problem
+- [x] Copying a token into the JSON file
+
+**Explanation:** Copying a token into JSON is a mistake; use environment interpolation and inspect the staged diff for accidental credentials.
+
+#### Q5: What does the expected result require?
+
+- [ ] A published GitHub Action
+- [ ] A merged PR with the export change
+- [x] A real read-only PR list for your fork, or a recorded blocker, with no write operation performed
+- [ ] A working connection to every example server
+
+**Explanation:** The expected result is a real read-only PR list for your fork, or a recorded blocker, and no write operation has been performed.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

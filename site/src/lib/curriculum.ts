@@ -3,6 +3,7 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { splitStepTabs } from "./tabs";
 import type { Catalog } from "./progress";
+import type { Locale } from "./i18n";
 
 export interface StepMeta {
   slug: string;
@@ -16,6 +17,10 @@ export interface StepMeta {
 }
 
 const STEPS_DIR = path.join(process.cwd(), "..", "steps");
+
+function stepsDir(locale: Locale): string {
+  return locale === "es" ? path.join(STEPS_DIR, "es") : STEPS_DIR;
+}
 
 function parseFrontmatter(raw: string): { meta: Record<string, string>; body: string } {
   const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
@@ -32,13 +37,14 @@ function parseList(v: string): string[] {
   return v.replace(/^\[|\]$/g, "").split(",").map((s) => s.trim().replace(/^"|"$/g, "")).filter(Boolean);
 }
 
-/** All 33 steps, ordered by step number. Reads ../steps/*.md (Repo B source). */
-export function getSteps(): StepMeta[] {
-  return fs
-    .readdirSync(STEPS_DIR)
-    .filter((f) => f.endsWith(".md"))
+/** All 33 steps, ordered by step number. Reads ../steps/*.md (EN) or ../steps/es/*.md (ES). ES falls back to EN until the ES tree exists. */
+export function getSteps(locale: Locale = "en"): StepMeta[] {
+  const dir = stepsDir(locale);
+  const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => f.endsWith(".md")) : [];
+  if (locale === "es" && files.length === 0) return getSteps("en");
+  return files
     .map((file) => {
-      const raw = fs.readFileSync(path.join(STEPS_DIR, file), "utf8");
+      const raw = fs.readFileSync(path.join(dir, file), "utf8");
       const { meta, body } = parseFrontmatter(raw);
       return {
         slug: file.replace(/\.md$/, ""),
@@ -67,6 +73,6 @@ export function getProgressCatalog(steps = getSteps()): Catalog {
   }));
 }
 
-export function getStep(slug: string): StepMeta | undefined {
-  return getSteps().find((s) => s.slug === slug);
+export function getStep(slug: string, locale: Locale = "en"): StepMeta | undefined {
+  return getSteps(locale).find((s) => s.slug === slug);
 }

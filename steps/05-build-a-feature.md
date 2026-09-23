@@ -145,7 +145,53 @@ Plan = reviewable design doc. Seniors catch wrong abstractions, juniors learn
 decomposition. Corrections live in the plan, where they are cheap — not in
 the diff, where they are expensive.
 
+## Quiz
+
+#### Q1: What is Plan Mode in this step?
+
+- [ ] A summary of the ticket written by Jordan
+- [x] A proposed plan for the feature that is reviewed and approved before code
+- [ ] The final PR description
+- [ ] A list of planted bugs to fix
+
+**Explanation:** Plan Mode is the proposed plan, approved pre-code, so a correction is cheap while it is still a sentence.
+
+#### Q2: Where does the export request's validation live?
+
+- [ ] src/lib/csv.ts
+- [ ] src/app/payments/page.tsx
+- [x] src/app/api/payments/export/route.ts
+- [ ] tests/csv.test.ts
+
+**Explanation:** The route handler already validates with Zod; extend it there first, then build the dialog.
+
+#### Q3: Why must the export reuse the server-side query path rather than the visible table rows?
+
+- [ ] Because client-side code cannot read money fields
+- [x] Because the paginated table cannot export all matching payments, only the visible page
+- [ ] Because the browser has no CSV support
+- [ ] Because the table shows generated data
+
+**Explanation:** The ticket notes say the paginated table cannot export client-side; reuse the query path so the full filtered export is complete.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Reviewing one acceptance criterion per diff pass
+- [ ] Recording the sort anomaly for Step 14
+- [x] Treating an empty selection as "select defaults"
+- [ ] Running npm test twice
+
+**Explanation:** Omitted columns mean defaults; columns= means the user's empty selection, and the two must stay distinct through UI, route, and helper.
+
+#### Q5: What must an explicit empty selection produce?
+
+- [ ] The default bank fields
+- [x] A zero-length body, not headers
+- [ ] A header-only CSV
+- [ ] An error page
+
+**Explanation:** The explicit empty selection yields a zero-length body, not headers, per the expected result.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

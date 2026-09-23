@@ -8,7 +8,8 @@ export type Catalog = readonly ProgressStep[];
 export interface SectionProgress { completed: boolean; revision: string; needsReview?: boolean }
 export interface Flags { complete?: boolean; outcome?: boolean }
 export interface StepState extends Flags { sections: Record<string, SectionProgress>; legacy?: Flags }
-export interface Progress { version: 2; steps: Record<string, StepState>; lastVisited?: { slug: string; section: string } }
+export interface QuizAttempt { answers: number[]; score: number; graded: boolean }
+export interface Progress { version: 2; steps: Record<string, StepState>; quiz?: Record<string, QuizAttempt>; lastVisited?: { slug: string; section: string } }
 export interface ProgressStorage { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem(key: string): void }
 
 export function emptyProgress(): Progress { return { version: 2, steps: {} }; }
@@ -36,7 +37,7 @@ function sectionMeta(catalog: Catalog, slug: string, id: string) {
   return section;
 }
 export function validateProgress(value: unknown, catalog: Catalog): Progress {
-  record(value); fields(value, ["version", "steps", "lastVisited"]);
+  record(value); fields(value, ["version", "steps", "quiz", "lastVisited"]);
   if (value.version !== 2) throw new Error("Unsupported progress version");
   record(value.steps);
   for (const [slug, step] of Object.entries(value.steps)) {
@@ -47,6 +48,15 @@ export function validateProgress(value: unknown, catalog: Catalog): Progress {
       sectionMeta(catalog, slug, id); record(section); fields(section, ["completed", "revision", "needsReview"]);
       if (typeof section.completed !== "boolean" || typeof section.revision !== "string" || !section.revision.length || section.revision.length > 128) throw new Error("Invalid section progress");
       if (Object.hasOwn(section, "needsReview") && typeof section.needsReview !== "boolean") throw new Error("Invalid review flag");
+    }
+  }
+  if (Object.hasOwn(value, "quiz")) {
+    record(value.quiz);
+    for (const [slug, attempt] of Object.entries(value.quiz)) {
+      stepMeta(catalog, slug); record(attempt); fields(attempt, ["answers", "score", "graded"]);
+      if (!Array.isArray(attempt.answers) || attempt.answers.some(a => typeof a !== "number" || !Number.isInteger(a) || a < 0)) throw new Error("Invalid quiz answers");
+      if (typeof attempt.score !== "number" || !Number.isInteger(attempt.score) || attempt.score < 0) throw new Error("Invalid quiz score");
+      if (typeof attempt.graded !== "boolean") throw new Error("Invalid quiz graded flag");
     }
   }
   if (Object.hasOwn(value, "lastVisited")) {
@@ -162,6 +172,12 @@ export function setSection(state: Progress, catalog: Catalog, slug: string, id: 
 export function setAggregate(state: Progress, catalog: Catalog, slug: string, key: keyof Flags, value: boolean): Progress {
   if (!["complete", "outcome"].includes(key) || typeof value !== "boolean") throw new Error("Invalid aggregate flag");
   return updateStep(state, catalog, slug, step => ({ ...step, [key]: value }));
+}
+export function setQuiz(state: Progress, catalog: Catalog, slug: string, answers: number[], score: number): Progress {
+  stepMeta(catalog, slug);
+  if (!Array.isArray(answers) || answers.some(a => typeof a !== "number" || !Number.isInteger(a) || a < 0)) throw new Error("Invalid quiz answers");
+  if (typeof score !== "number" || !Number.isInteger(score) || score < 0) throw new Error("Invalid quiz score");
+  return { ...state, quiz: { ...state.quiz, [slug]: { answers, score, graded: true } } };
 }
 export function visitSection(state: Progress, catalog: Catalog, slug: string, section: string): Progress {
   sectionMeta(catalog, slug, section);

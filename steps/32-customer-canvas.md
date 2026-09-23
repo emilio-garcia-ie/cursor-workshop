@@ -26,7 +26,9 @@ meeting-booked automation.
 
 ### Exercise kit — a canvas without invented benchmarks
 
-**Starter input:** Reuse fictional Crestview from Step 31. Define an explicit
+#### Starter code path
+
+Reuse fictional Crestview from Step 31. Define an explicit
 synthetic worksheet, independent of the real console seed:
 
 ```text
@@ -54,41 +56,106 @@ late-fee automation from a payment-status field.
 4. Review internally without publishing. Record rendering/sharing availability
    separately; a content draft can be complete while runtime sharing is untested.
 
-**Worked example:** Occupancy is `108 / 120 = 90%`; the gap to the chosen 95%
-target is `-5 percentage points`. Late-record share is `12 / 100 = 12%`, not a
-rent-delinquency dollar rate. Eighteen open orders are a count, not an SLA breach
-rate without due dates and a defined observation time.
+#### Expected diff
 
-**Expected deliverable:** A rendered canvas or clearly labeled offline layout,
-a calculation sheet, three evidence-bound discussion actions, and an audience/
-sharing decision. No real prospect analytics or automatic meeting trigger.
+A rendered canvas or clearly labeled offline layout, a calculation sheet,
+three evidence-bound discussion actions, and an audience/sharing decision. No
+real prospect analytics or automatic meeting trigger.
 
-**Hints:** Add "fictional demo" to each panel, not just a footer. Do not compare
-synthetic values with an industry benchmark that has not been sourced.
+#### Hints
 
-**Solution:** Show the three correctly labeled measures and the workshop target
-as an assumption. Use available screens as discussion aids, not guarantees of
-late-fee automation, maintenance triage, or predictive forecasting features.
+- Add "fictional demo" to each panel, not just a footer.
+- Do not compare synthetic values with an industry benchmark that has not been
+  sourced.
 
-**Stretch:** Replace the occupancy denominator with "unknown." The canvas
-should display insufficient data rather than zero or a confident percentage.
-If you later share internally, verify eligibility and reviewer access first[25].
+#### Solution approach
 
-### Common mistakes
+Occupancy is `108 / 120 = 90%`; the gap to the chosen 95% target is `-5
+percentage points`. Late-record share is `12 / 100 = 12%`, not a rent-delinquency
+dollar rate. Eighteen open orders are a count, not an SLA breach rate without
+due dates and a defined observation time. Show the three correctly labeled
+measures and the workshop target as an assumption. Use available screens as
+discussion aids, not guarantees of late-fee automation, maintenance triage, or
+predictive forecasting features.
 
-- Presenting the fictional 120-unit worksheet as actual seeded customer telemetry.
-- Converting payment-record share into a dollar delinquency claim.
-- Assuming a shared Canvas link is public or available on every account[25].
+#### Expected result
 
-### Pro tips
-
-- Put source, timestamp, unit, and denominator next to every displayed number.
-- Separate current prototype surfaces from proposed customer optimization actions.
+You have a canvas or offline layout with labeled denominators, a manual
+calculation sheet, three evidence-bound actions, and an audience/sharing
+decision, and no real prospect analytics or publication occurred.
 
 > Screenshot placeholder: fictional canvas with labeled denominators, manual
 > calculations, and unavailable benchmark; no external customer-share claim.
 
+#### Stretch goal
+
+Replace the occupancy denominator with "unknown." The canvas should display
+insufficient data rather than zero or a confident percentage. If you later
+share internally, verify eligibility and reviewer access first[25].
+
+### Common mistakes
+
+- **Mistake 1:** Presenting the fictional 120-unit worksheet as actual seeded
+  customer telemetry.
+- **Mistake 2:** Converting payment-record share into a dollar delinquency
+  claim.
+- **Mistake 3:** Assuming a shared Canvas link is public or available on every
+  account[25].
+
+### Pro tips
+
+- **Pro tip 1:** Put source, timestamp, unit, and denominator next to every
+  displayed number.
+- **Pro tip 2:** Separate current prototype surfaces from proposed customer
+  optimization actions.
+
+## Quiz
+
+#### Q1: What is a Canvas in this step?
+
+- [ ] A public report anyone can open
+- [x] An interactive artifact rendered beside chat with a saved, reopenable, and revisable view
+- [ ] A code editor pane
+- [ ] A published webpage
+
+**Explanation:** Canvases are interactive artifacts rendered beside chat with a saved view that can be reopened and revised.
+
+#### Q2: Which screen does the learner read for its current metric-card calculations?
+
+- [ ] src/app/payments/page.tsx
+- [ ] src/app/maintenance/page.tsx
+- [x] src/app/forecasts/page.tsx
+- [ ] src/app/inspections/page.tsx
+
+**Explanation:** The kit reads src/app/forecasts/page.tsx for its current metric-card calculations.
+
+#### Q3: Why must the fictional worksheet not be described as customer telemetry?
+
+- [ ] Because 120 units is too few
+- [ ] Because the console seed includes it
+- [x] Because it is an explicit synthetic worksheet independent of the real console seed
+- [ ] Because Maya declined to label it
+
+**Explanation:** The worksheet is an explicit synthetic worksheet labeled fictional demo, independent of the real console seed.
+
+#### Q4: Which interpretation is called out as a common mistake about the late records?
+
+- [ ] Counting 12 late records
+- [ ] Labeling the denominator
+- [x] Converting the payment-record share into a dollar delinquency claim
+- [ ] Using 108 active leases as denominator
+
+**Explanation:** The late-record share is 12/100, which is 12%, and is not a rent-delinquency dollar rate.
+
+#### Q5: What must remain true about sharing after the internal review?
+
+- [ ] The canvas is public for the prospect
+- [ ] A meeting was booked automatically
+- [x] No publication occurred and sharing availability is recorded separately from content completion
+- [ ] The external benchmark was filled in
+
+**Explanation:** The expected result records no publication, with rendering and sharing availability recorded separately from the completed content draft.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

@@ -84,12 +84,13 @@ Trace the omitted-column default, the explicit selection, and the CSV
 output using the four-file run. For the ticket-only run, accept a statement
 of requirements plus a request to inspect the implementation. Compare
 correctness and scope first; record token usage only if the UI supplies it.
+Treat “do not read a file” as an instruction, not a security boundary.
 
 #### Expected result
 
-A compact handoff that identifies its evidence and uncertainty. No claimed
-indexing exclusion, access control, or percentage saving follows from this
-experiment; asking not to read a file is not a security boundary.
+You have a compact handoff that identifies its evidence and uncertainty, and
+it claims no indexing exclusion, access control, or percentage saving from
+this experiment.
 
 [SCREENSHOT: Four-file context selection and A/B evidence table, including one missing-evidence response]
 
@@ -132,7 +133,53 @@ uses a coordinator that delegates implementation[36]. That named product
 is different from this repository project. The local four-file exercise
 requires no Projects provisioning.
 
+## Quiz
+
+#### Q1: What does "context" mean in Cursor?
+
+- [x] The evidence and instructions available for the task, not a promise that the agent remembers the whole repository
+- [ ] The entire repository loaded into memory
+- [ ] The system prompt only
+- [ ] The number of tokens in the conversation
+
+**Explanation:** Context is the evidence and instructions available for this task; it is not a promise that the agent remembers the whole repository.
+
+#### Q2: Which four files make up the deliberately small evidence set?
+
+- [ ] All of src plus the ticket
+- [x] HLN-101.md, the export route, export.ts, and src/lib/csv.ts
+- [ ] root.mdc, money.mdc, time.mdc, and api-routes.mdc
+- [ ] package.json, README.md, tests, and hooks.json
+
+**Explanation:** The starter evidence set is the ticket, the export route, src/domains/payments/export.ts, and src/lib/csv.ts.
+
+#### Q3: Why should unused MCP servers be toggled off?
+
+- [ ] Because they stop working after a session
+- [ ] Because they are not installed yet
+- [x] Because tools are part of context and idle servers consume budget without helping the task
+- [ ] Because only paid plans can enable them
+
+**Explanation:** Tools, built-ins plus MCP servers, fill context, so toggle unused servers off and keep the task budget small.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Starting small and adding reads when evidence is missing
+- [ ] Keeping the A/B chats independent
+- [x] Attaching all of src for a four-file question
+- [ ] Verifying that cited passages support the conclusion
+
+**Explanation:** Attaching all of src for a four-file question is a mistake; start small and let a demonstrated evidence gap justify the next read.
+
+#### Q5: What must the handoff avoid claiming?
+
+- [ ] What evidence was supplied
+- [ ] What uncertainty remains
+- [x] An indexing exclusion or percentage saving from this experiment
+- [ ] Whether the empty-selection question was answered correctly
+
+**Explanation:** The handoff claims no indexing exclusion, access control, or percentage saving from this experiment.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

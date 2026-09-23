@@ -19,12 +19,11 @@ try {
   const legacy = { "01-day-one": { complete: true, outcome: true } };
   await page.evaluate(value => localStorage.setItem("hearthline-progress-v1", JSON.stringify(value)), legacy);
   await page.goto(`${base}/steps/01-day-one`);
-  await page.getByRole("checkbox", { name: "Mark whole step complete (self-report)" }).waitFor();
+  await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).waitFor();
   await page.waitForFunction(() => document.querySelector('input[type="checkbox"]:not(:disabled)'));
-  assert.equal(await page.getByRole("checkbox", { name: "Mark whole step complete (self-report)" }).isChecked(), true);
-  assert.equal(await page.getByRole("checkbox", { name: "Mark The project complete (self-report)" }).isChecked(), false);
-  await page.getByRole("tab", { name: "Implement", exact: true }).click();
-  assert.equal(await page.getByRole("checkbox", { name: "Mark Implement complete (self-report)" }).isChecked(), false);
+  assert.equal(await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), true);
+  assert.equal(await page.locator("#expected-result").count(), 1);
+  assert.equal(await page.locator('input[type="checkbox"]').count(), 1);
   const migrated = await page.evaluate(() => JSON.parse(localStorage.getItem("hearthline-progress-v2")));
   assert.deepEqual(migrated.steps["01-day-one"], { sections: {}, legacy: { complete: true, outcome: true } });
   assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("hearthline-progress-v1"))), legacy);
@@ -36,17 +35,16 @@ try {
   for await (const chunk of stream) chunks.push(chunk);
   const exported = Buffer.concat(chunks);
   assert.deepEqual(JSON.parse(exported.toString()).steps, migrated.steps);
-  await page.getByRole("checkbox", { name: "Mark Implement complete (self-report)" }).check();
   await page.reload();
-  await page.waitForFunction(() => document.querySelector('[role="tab"][aria-selected="true"]')?.textContent.includes("Implement"));
-  assert.equal(await page.getByRole("checkbox", { name: "Mark Implement complete (self-report)" }).isChecked(), true);
+  await page.waitForFunction(() => document.querySelector('input[type="checkbox"]:not(:disabled)'));
+  assert.equal(await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), true);
   await page.getByLabel("Import progress JSON (max 1 MB)").setInputFiles({ name: "backup.json", mimeType: "application/json", buffer: exported });
   await page.getByRole("button", { name: "Confirm replace progress" }).click();
   await page.getByText("Progress imported and saved.", { exact: true }).waitFor();
-  assert.equal(await page.getByRole("checkbox", { name: "Mark Implement complete (self-report)" }).isChecked(), false);
+  assert.equal(await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), true);
   await page.reload();
   await page.waitForFunction(() => document.querySelector('input[type="checkbox"]:not(:disabled)'));
-  assert.equal(await page.getByRole("checkbox", { name: "Mark whole step complete (self-report)" }).isChecked(), true);
+  assert.equal(await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), true);
   assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("hearthline-progress-v2")).steps), migrated.steps);
   assert.equal(await page.locator("h1").count(), 1);
   assert.equal(await page.locator('input[type="checkbox"][disabled]').count(), 0);
@@ -54,6 +52,8 @@ try {
   await page.keyboard.press("ArrowLeft");
   assert.equal(await page.getByRole("tab", { name: "The project", exact: true }).getAttribute("aria-selected"), "true");
   await page.keyboard.press("End");
+  assert.equal(await page.getByRole("tab", { name: "Quiz", exact: true }).getAttribute("aria-selected"), "true");
+  await page.getByRole("tab", { name: "Implement", exact: true }).click();
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("Denied"); } } }));
   await page.getByRole("button", { name: "Copy code", exact: true }).first().click();
   await page.getByText("Copy failed. Select the code and copy it manually.", { exact: true }).waitFor();
@@ -91,13 +91,12 @@ try {
   await page.evaluate(raw => localStorage.setItem("hearthline-progress-v2", raw), validStored);
   await home.getByRole("button", { name: "Export progress JSON", exact: true }).waitFor();
   await recoveryPage.close();
-  await page.getByRole("checkbox", { name: "Mark whole step complete (self-report)" }).uncheck();
+  await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).uncheck();
   await home.getByText(/33 steps remaining · 0 points earned/).waitFor();
-  await page.getByRole("checkbox", { name: "Mark Implement complete (self-report)" }).check();
   await page.goto(`${base}/steps/02-clone-and-run`);
   await page.waitForFunction(() => document.querySelector('input[type="checkbox"]:not(:disabled)'));
   assert.equal(await page.getByRole("tab", { name: "Learn", exact: true }).getAttribute("aria-selected"), "true");
-  assert.equal(await page.getByRole("checkbox", { name: "Mark Learn complete (self-report)" }).isChecked(), false);
+  assert.equal(await page.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), false);
   await home.getByRole("link", { name: "Continue: Step 2 · Learn", exact: true }).waitFor();
   for (const [version, points, count] of [["short", 215, 10], ["medium", 355, 20], ["long", 520, 33]]) {
     await home.goto(`${base}/?version=${version}`);
@@ -114,6 +113,111 @@ try {
   await diagrams.goto(`${base}/diagrams`);
   assert.equal(await diagrams.locator('img[src^="/diagrams/"]').count(), 10);
   assert.equal(await diagrams.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0)), true);
+  const nextStep = await context.newPage();
+  await nextStep.goto(`${base}/steps/01-day-one`);
+  await nextStep.getByRole("link", { name: "Next: Step 2: Clone It and Run It", exact: true }).waitFor();
+  await nextStep.getByRole("link", { name: "Next: Step 2: Clone It and Run It", exact: true }).click();
+  await nextStep.getByRole("heading", { name: "Step 2: Clone It and Run It" }).waitFor();
+  const quizPage = await context.newPage();
+  await quizPage.goto(`${base}/steps/01-day-one`);
+  await quizPage.getByRole("tab", { name: "Quiz", exact: true }).click();
+  await quizPage.getByRole("radiogroup").nth(0).waitFor();
+  for (let i = 0; i < 5; i++) await quizPage.locator('[role="radiogroup"]').nth(i).locator('input[type="radio"]').nth(0).check();
+  await quizPage.getByRole("button", { name: "Grade my answers" }).click();
+  await quizPage.getByText(/Your score: 0 \/ 5/).waitFor();
+  await quizPage.reload();
+  await quizPage.getByRole("tab", { name: "Quiz", exact: true }).click();
+  await quizPage.getByText(/Your score: 0 \/ 5/).waitFor();
+  const quizStored = await quizPage.evaluate(() => JSON.parse(localStorage.getItem("hearthline-progress-v2")).quiz?.["01-day-one"]);
+  assert.equal(quizStored.score, 0);
+  assert.equal(quizStored.graded, true);
+  const filePage = await context.newPage();
+  await filePage.addInitScript(() => {
+    const readFile = () => sessionStorage.getItem("fakeProgressFile") ?? "";
+    window.__savedTextRef = readFile;
+    const fakeHandle = {
+      id: "fake-progress-file",
+      getFile: async () => ({ text: async () => readFile() }),
+      createWritable: async () => { let pendingText = ""; return { write: async value => { pendingText = value; }, close: async () => { sessionStorage.setItem("fakeProgressFile", pendingText); } }; },
+      queryPermission: async () => "granted",
+      requestPermission: async () => "granted",
+    };
+    window.showSaveFilePicker = async () => { window.__pickerCalls = (window.__pickerCalls ?? 0) + 1; return fakeHandle; };
+    window.showOpenFilePicker = async () => [fakeHandle];
+    const remembered = () => sessionStorage.getItem("fakeHandleRemembered") === "1";
+    const backing = new Map(remembered() ? [["current", fakeHandle]] : []);
+    const makeRequest = result => { const req = { result, onsuccess: null, onerror: null }; Promise.resolve().then(() => req.onsuccess?.({ target: req })); return req; };
+    const fakeDB = {
+      transaction: () => ({
+        objectStore: () => ({
+          get: key => makeRequest(backing.get(key)),
+          put: (value, key) => { if (key === "current") sessionStorage.setItem("fakeHandleRemembered", "1"); backing.set(key, value); return makeRequest(undefined); },
+          delete: key => { if (key === "current") sessionStorage.removeItem("fakeHandleRemembered"); backing.delete(key); return makeRequest(undefined); },
+        }),
+      }),
+    };
+    Object.defineProperty(window, "indexedDB", { configurable: true, value: { open: () => makeRequest(fakeDB) } });
+  });
+  await filePage.goto(`${base}/steps/01-day-one`);
+  await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).waitFor();
+  await filePage.evaluate(() => { localStorage.clear(); sessionStorage.removeItem("fakeProgressFile"); sessionStorage.removeItem("fakeHandleRemembered"); });
+  await filePage.reload();
+  await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).waitFor();
+  await filePage.getByRole("button", { name: "Save to hearthline-progress.json" }).waitFor();
+  await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).check();
+  await filePage.getByRole("button", { name: "Save to hearthline-progress.json" }).click();
+  await filePage.getByText(/chosen and saved/).waitFor();
+  assert.equal(await filePage.evaluate(() => window.__pickerCalls), 1);
+  assert.equal(JSON.parse(await filePage.evaluate(() => window.__savedTextRef())).steps["01-day-one"].complete, true);
+  await filePage.evaluate(() => localStorage.clear());
+  await filePage.reload();
+  await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).waitFor();
+  assert.equal(await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), false);
+  await filePage.getByRole("button", { name: "Load from saved progress file" }).click();
+  await filePage.getByRole("button", { name: "Confirm replace progress" }).click();
+  await filePage.getByText("Progress imported and saved.", { exact: true }).waitFor();
+  assert.equal(await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).isChecked(), true);
+  assert.equal(await filePage.evaluate(() => window.__pickerCalls ?? 0), 0);
+  await filePage.getByRole("checkbox", { name: "Mark step complete (self-report)" }).uncheck();
+  await filePage.getByRole("button", { name: "Overwrite progress file" }).click();
+  await filePage.getByText(/Progress overwritten in hearthline-progress\.json/).waitFor();
+  assert.equal(await filePage.evaluate(() => window.__pickerCalls ?? 0), 0);
+  assert.equal(JSON.parse(await filePage.evaluate(() => window.__savedTextRef())).steps["01-day-one"].complete, false);
+  const esPage = await context.newPage();
+  await esPage.goto(`${base}/es/steps/01-day-one`);
+  assert.equal(await esPage.evaluate(() => document.documentElement.lang), "es");
+  await esPage.getByRole("tab", { name: "El proyecto", exact: true }).waitFor();
+  await esPage.getByRole("checkbox", { name: "Marcar el paso completo (autoinforme)" }).waitFor();
+  await esPage.getByRole("tab", { name: "Comprobación", exact: true }).click();
+  await esPage.getByRole("button", { name: "Calificar mis respuestas" }).waitFor();
+  const esNext = esPage.getByRole("link", { name: "Siguiente: Paso 2: Clone It and Run It", exact: true });
+  await esNext.waitFor();
+  assert.equal(await esNext.getAttribute("href"), "/es/steps/02-clone-and-run");
+  await esPage.getByRole("button", { name: "English" }).click();
+  await esPage.getByRole("heading", { name: "Step 1: Day One: Meet the Team" }).waitFor();
+  assert.equal(await esPage.evaluate(() => document.documentElement.lang), "en");
+  assert.equal(await esPage.evaluate(() => localStorage.getItem("hearthline-locale")), "en");
+  const esGlossary = await context.newPage();
+  await esGlossary.goto(`${base}/es/glossary`);
+  assert.equal(await esGlossary.locator("h1").innerText(), "Glosario");
+  assert.ok(await esGlossary.locator('a[href^="/es/steps/"]').count() > 0);
+  const esBiblio = await context.newPage();
+  await esBiblio.goto(`${base}/es/bibliography`);
+  assert.equal(await esBiblio.locator("h1").innerText(), "Bibliografía");
+  assert.equal(await esBiblio.locator('li[id="1"]').count(), 1);
+  assert.ok(await esGlossary.getByRole("link", { name: "Bibliografía" }).count() > 0);
+  const esStep = await context.newPage();
+  await esStep.goto(`${base}/es/steps/01-day-one`);
+  assert.ok(await esStep.locator('a[href^="/es/bibliography#"]').count() > 0);
+  await esGlossary.close();
+  await esBiblio.close();
+  await esStep.close();
+  const lastStep = await context.newPage();
+  await lastStep.goto(`${base}/steps/33-improvement-loop`);
+  await lastStep.getByRole("link", { name: "All steps complete", exact: true }).waitFor();
+  assert.equal(await lastStep.getByRole("link", { name: /^Next:/ }).count(), 0);
+  await lastStep.getByRole("link", { name: "All steps complete", exact: true }).click();
+  await lastStep.getByRole("heading", { name: /Join Hearthline on day one/ }).waitFor();
   await home.getByText("Building · 25 pts", { exact: true }).waitFor();
   await home.setViewportSize({ width: 390, height: 844 });
   assert.equal(await home.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
@@ -121,9 +225,25 @@ try {
     await home.screenshot({ path: `${process.env.QA_SCREENSHOT_DIR}/phase-c-mobile.png`, fullPage: true });
     await home.setViewportSize({ width: 1440, height: 1000 });
     await home.screenshot({ path: `${process.env.QA_SCREENSHOT_DIR}/phase-c-desktop.png`, fullPage: true });
+    const esHome = await context.newPage();
+    await esHome.goto(`${base}/es`);
+    await esHome.setViewportSize({ width: 390, height: 844 });
+    assert.equal(await esHome.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await esHome.screenshot({ path: `${process.env.QA_SCREENSHOT_DIR}/phase-c-es-mobile.png`, fullPage: true });
+    await esHome.setViewportSize({ width: 1440, height: 1000 });
+    await esHome.screenshot({ path: `${process.env.QA_SCREENSHOT_DIR}/phase-c-es-desktop.png`, fullPage: true });
+    const esStepShot = await context.newPage();
+    await esStepShot.goto(`${base}/es/steps/01-day-one`);
+    await esStepShot.setViewportSize({ width: 390, height: 844 });
+    assert.equal(await esStepShot.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await esStepShot.screenshot({ path: `${process.env.QA_SCREENSHOT_DIR}/phase-c-es-step-mobile.png`, fullPage: true });
+    await esStepShot.setViewportSize({ width: 1440, height: 1000 });
+    await esStepShot.screenshot({ path: `${process.env.QA_SCREENSHOT_DIR}/phase-c-es-step-desktop.png`, fullPage: true });
+    await esHome.close();
+    await esStepShot.close();
   }
   assert.deepEqual(errors, []);
-  console.log("PASS: migration/retained legacy, snapshot preserved on malformed v2 with raw recovery byte-exact and disabled empty export, section reconciliation, export/import/reload, invalid/cancel import, keyboard tabs, copy failure, single H1, citations/diagrams, Resume/filter fallback, multi-tab sync, slug reset, totals 215/355/520 with step 6 at 25 pts, 390px overflow; pageerror listeners on every context page; no client errors");
+  console.log("PASS: migration/retained legacy, single whole-step self-report with expected-result anchor and no per-tab checkboxes, snapshot preserved on malformed v2 with raw recovery byte-exact and disabled empty export, section reconciliation, export/import/reload, invalid/cancel import, keyboard tabs, copy failure, single H1, citations/diagrams, Resume/filter fallback, step footer next/previous with finished state on step 33, quiz grading with persistence across reload, progress file overwrite-in-place and reload pickup without a picker, ES locale with lang attribute, localized UI, locale-correct footer, persistent language toggle, ES glossary/bibliography routes with locale-aware citations and step links, totals 215/355/520 with step 6 at 25 pts, 390px overflow; pageerror listeners on every context page; no client errors");
 } finally {
   await browser?.close();
   server.kill("SIGTERM");

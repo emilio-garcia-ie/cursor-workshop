@@ -86,13 +86,14 @@ Run explicit invocation first, then the positive and negative trigger
 prompts in fresh chats. Record invocation, title format, business impact,
 actual evidence, and missing checks. Withhold build output once: the correct
 result says build unverified, never “passed.” Fix the description or body
-based on the failure and repeat the same probes.
+based on the failure and repeat the same probes. Record a failed trigger as
+a discovery failure, not proof that automatic selection is guaranteed.
 
 #### Expected result
 
-A discoverable skill and a PR draft that Priya can trace to the right
-checkout. No checkmark without evidence. Record any failed trigger rather
-than claiming automatic selection is guaranteed.
+You have a discoverable `hearthline-pr` skill and a draft PR that Priya can
+trace to the right checkout, and no checkbox claims evidence that was not
+supplied.
 
 [SCREENSHOT: hearthline-pr invocation beside a draft with actual test evidence and an unverified build entry]
 
@@ -131,7 +132,53 @@ Publishing a personal skill to a team produces a hosted plugin; teammates
 opt in and referenced skills are not automatically bundled[28]. This kit
 requires neither sync nor publishing.
 
+## Quiz
+
+#### Q1: What triggers a skill?
+
+- [ ] Any mention of its folder name
+- [x] Its name and description frontmatter
+- [ ] Its scripts directory
+- [ ] A teammate's permission
+
+**Explanation:** SKILL.md is required with name and description; the description is the trigger copy, so a vague description never triggers.
+
+#### Q2: Where is the new hearthline-pr skill authored?
+
+- [ ] docs/tickets/
+- [ ] src/app/
+- [x] .cursor/skills/hearthline-pr/SKILL.md in the tooling worktree
+- [ ] site/src/lib/
+
+**Explanation:** The skill is created under .cursor/skills/hearthline-pr/ in the tooling worktree so it is discoverable.
+
+#### Q3: Why must the draft PR be traced to the feature checkout?
+
+- [ ] Because the tooling branch formats drafts better
+- [ ] Because main contains more files
+- [x] Because Priya must be able to trace the PR to the checkout that holds the HLN-101 change
+- [ ] Because worktrees cannot be shared
+
+**Explanation:** The expected result is a draft that Priya can trace to the right checkout, not the tooling branch's own diff labeled as HLN-101.
+
+#### Q4: Which is a common mistake the step warns against?
+
+- [ ] Invoking the skill explicitly
+- [ ] Recording a failed trigger as a discovery failure
+- [x] Filling a verification template with plausible results
+- [ ] Using actual command output in the draft
+
+**Explanation:** Missing output means unverified; rerun the check or leave it unchecked, and never invent verification.
+
+#### Q5: What must the draft PR body reflect?
+
+- [x] Verified and not-done sections matching the evidence actually supplied
+- [ ] Every checkbox marked complete
+- [ ] The tooling branch's full history
+- [ ] A build status of passed without running it
+
+**Explanation:** The draft has verified and not-done sections that reflect the evidence supplied; no checkbox claims evidence that was not supplied.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

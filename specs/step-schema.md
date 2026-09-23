@@ -32,8 +32,13 @@ personas: ["vibecoders", "developers", "data-scientists", "ai-engineers", "forwa
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome
 ```
+
+The `## Complete` list is stripped from rendered content by the site's tab
+splitter; the self-report is a React control, not a markdown checkbox. The
+second historical line (`- [ ] I got the expected outcome`) is removed. The
+whole-step self-report links to the step's `#### Expected result` (see
+`curriculum-standards.md` §3, §5).
 
 ## Example (minimal conforming step)
 
@@ -49,17 +54,25 @@ personas: ["vibecoders", "developers", "data-scientists", "ai-engineers", "forwa
 
 # Step 1 — Day One: Meet the Team (5 pts)
 
-## Learn
+## The project
 …
 ## Implement
+
+#### Starter code path
 …
-## Pro tips
+#### Expected diff
 …
-## Advanced
+#### Hints
+…
+#### Solution approach
+…
+#### Expected result
 …
 
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome
 ```
+
+The exercise kit (Starter code path, Expected diff, Hints, Solution approach,
+Expected result) is mandatory per `curriculum-standards.md` §3.

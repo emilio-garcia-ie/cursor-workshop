@@ -45,7 +45,9 @@ folders carrying only what is true there. Layers, not piles.
 2. In chat, run `/create-rule` and describe the Release Standards idea below.
    `/create-rule` generates the file with proper frontmatter[1].
 3. Add a **Release Standards** section to `root.mdc`: test evidence required,
-   no direct `main` commits, one-line business impact per change.
+   no direct `main` commits, one-line business impact per change. Priya
+   reviews every PR against these three lines, so the rule keeps her bar
+   attached to the codebase.
 
 ### Why scope matters
 
@@ -106,8 +108,9 @@ explain why a rule attached, or record the unexpected behavior for review.
 
 #### Expected result
 
-A small root-rule diff and a three-case inclusion record (matching file,
-nonmatching file, explicit mention). No money calculation changes.
+You have a small root-rule diff and a three-case inclusion record (matching
+file, nonmatching file, explicit mention), and no money calculation has
+changed.
 
 [SCREENSHOT: Matching-file chat with attached money rule beside the nonmatching-file probe]
 
@@ -143,7 +146,53 @@ application scope before it can guide a task[1]. Rules do not apply to Tab,
 Inline Edit, or Bugbot PR reviews[2]. `.cursorrules` is legacy with future
 deprecation announced, not already removed; use project rules for new work[2].
 
+## Quiz
+
+#### Q1: Which frontmatter field makes a project rule apply in every session?
+
+- [ ] globs
+- [x] alwaysApply: true
+- [ ] description
+- [ ] apply: manual
+
+**Explanation:** A rule with alwaysApply: true is an Always Apply rule and attaches in every session.
+
+#### Q2: Where do Hearthline's project rules live?
+
+- [ ] docs/rules/
+- [x] .cursor/rules/ as .mdc files
+- [ ] site/src/lib/
+- [ ] src/domains/
+
+**Explanation:** Project rules live in .cursor/rules as .mdc files and are version-controlled.
+
+#### Q3: Why does the Release Standards section go into root.mdc rather than a scoped file?
+
+- [ ] Because root rules load the fastest
+- [x] Because Priya reviews every PR against those three lines, so an always-applied rule keeps her bar attached to the codebase
+- [ ] Because scoped rules cannot contain instructions
+- [ ] Because root.mdc is the only editable rule
+
+**Explanation:** Release standards apply to every PR, so the always-applied root rule keeps Priya's bar attached to the codebase.
+
+#### Q4: What is a common mistake the step warns against?
+
+- [ ] Using globs to narrow rule scope
+- [ ] Probing which rules actually attached
+- [x] Saving a project rule as an ordinary .md file
+- [ ] Using /create-rule as a draft generator
+
+**Explanation:** Project rules must use the documented .mdc rule format or the separate AGENTS.md alternative, not a plain .md file.
+
+#### Q5: Which three cases must the inclusion record cover?
+
+- [ ] Fast, slow, and timed probes
+- [x] A matching file, a nonmatching file, and an explicit mention
+- [ ] Root, user, and team rules
+- [ ] Draft, staging, and published rules
+
+**Explanation:** The three-case record covers a matching-file probe, a nonmatching-file probe, and an explicit mention of the rule.
+
 ## Complete
 
 - [ ] Mark complete
-- [ ] I got the expected outcome

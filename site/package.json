@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:browser": "node tests/browser.mjs"
+    "test:browser": "node tests/browser.mjs",
+    "check:termbase": "node ../scripts/check-termbase.mjs",
+    "check:anchors": "node ../scripts/check-anchor-parity.mjs"
   },
   "dependencies": {
     "next": "16.3.5",
