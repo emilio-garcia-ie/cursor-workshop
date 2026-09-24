@@ -56,3 +56,25 @@ Recorded: 2026-09-11. Source: inspection of /Users/emilio/Documents/cursor-train
 - ES content contract: steps/es + glossary/bibliography/fact-check `.es.md`
   files, termbase-checked (`npm run check:termbase`) and anchor-parity-checked
   (`npm run check:anchors`), both green 2026-09-23.
+
+## E04 Phase-4 console migration (2026-09-24) — supersedes E02 console pins
+
+- The learner console migrated off next@14.2.35 (final 14.x; audit
+  unpatchable) to **next@16.3.6 / react@19.3.0 / vitest@5.0.1 / eslint 9 +
+  eslint-config-next@16.3.6 (flat config) / vite@8.3.0 / @types/node@^22**.
+  `npm audit` and `npm audit --omit=dev` both report **0** from a flagless
+  clean install. Execution record with per-task gate evidence:
+  `hearthline-operator-console/docs/PHASE4-NOTES.md` (plan:
+  PHASE4-CONSOLE-MIGRATION.md, tasks M01–M09, all gates passed).
+- **E02 console pins are superseded**: next/react/vitest/eslint rows no
+  longer describe the console. Rows that survive unchanged: zod 4.6.2,
+  typescript 5.x, tailwindcss 3.4.x. @tremor/react was REMOVED (no
+  react-19-compatible release exists; its five primitives — Card, Title,
+  Text, Metric — became local components in `src/components/ui.tsx`, and
+  the one Grid usage became idiomatic Tailwind classes).
+- **TS2802 console baseline is closed**: next 16's tsconfig codemod added
+  `"target": "ES2017"`; standalone `tsc --noEmit` now exits 0.
+- Learner-visible change: the console now requires **Node.js >= 22.12**
+  (vitest 5 engine); recorded in both console READMEs. Suite count
+  unchanged at 80/80; planted bugs and their contracts untouched; the
+  bilingual surface (README.es, tickets/es, parity) is green post-migration.

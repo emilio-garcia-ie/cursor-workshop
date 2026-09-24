@@ -110,7 +110,23 @@ Block 4 — Craftsmanship & Quality Locks (all answers no):
 - Cross-browser QA (Chrome only; headless via installed Google Chrome).
 - Human pixel inspection of the 390/1440 PNGs by the reviewer.
 
-### Dependency status (2026-09-23)
+### Dependency status (2026-09-24 update — Phase-4 migration)
+
+- Workshop site: `npm audit` 0 (next@16.3.5, vitest@4.1.11 above the
+  GHSA-82fw range).
+- hearthline-operator-console: **`npm audit` and `npm audit --omit=dev`
+  both report 0.** The 7 Phase-3 findings (next 14.x criticals, bundled
+  PostCSS, glob, @vitest/mocker) were resolved by executing
+  PHASE4-CONSOLE-MIGRATION.md (2026-09-24): next@16.3.6 + react@19 +
+  vitest@5 + eslint 9 flat config, @tremor/react removed (no react-19
+  peers; local ui primitives), @types/node ^22. The full per-task gate
+  record is `console docs/PHASE4-NOTES.md`; BUILD-BASELINE E04 supersedes
+  the console E02 pins. The Phase-3 "accept documented" deviation above is
+  therefore CLOSED. Also closed by the migration: the standalone-`tsc`
+  TS2802 console baseline (next 16 codemod added `target: ES2017`). New
+  learner requirement: console needs Node >= 22.12 (both READMEs note it).
+
+### Dependency status (2026-09-23, superseded for the console by the update above)
 
 - Workshop site: `npm audit` 0 (next@16.3.5, vitest@4.1.11 above the
   GHSA-82fw range).
