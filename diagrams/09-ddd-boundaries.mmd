@@ -1,0 +1,8 @@
+flowchart TB
+    B[".cursor/rules/boundaries.mdc"] --> P["Property"]
+    B --> L["Leasing"]
+    B --> O["Operations"]
+    B --> PM["Payments"]
+    P -->|index.ts only| L
+    L -->|index.ts only| PM
+    PM -.->|never internal files| O

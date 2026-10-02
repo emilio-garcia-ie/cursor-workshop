@@ -1,0 +1,4 @@
+flowchart LR
+    E["git push"] --> H["beforeShellExecution hook"]
+    H -->|tests pass| A["allow: push proceeds"]
+    H -->|tests fail, exit 2| D["deny: push blocked + reason"]

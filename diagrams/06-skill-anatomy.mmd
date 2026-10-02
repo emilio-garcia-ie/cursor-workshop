@@ -1,0 +1,4 @@
+flowchart TB
+    S["SKILL.md<br/>(required: name + description)"] --> T["Trigger:<br/>description always in context"]
+    T --> B["Body:<br/>loaded on trigger"]
+    B --> R["references/ scripts/ assets/<br/>loaded on demand"]

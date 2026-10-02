@@ -1,6 +1,22 @@
-# Hearthline workshop site
+# cursor-workshop (unofficial)
 
-Next.js 16 site for the cursor-workshop curriculum (`../steps/*.md`). Step pages are prerendered; the filtered home page is dynamic. Run with a Next.js server, not an assumed static export.
+"You join Hearthline on day one, clone the operator console, and ship a
+real feature while learning every Cursor surface in the order you would
+actually reach for it. Unofficial. Cited throughout. Built for
+vibecoders, developers, data scientists, AI engineers, and
+forward-deployed engineers."
+
+> **Unofficial.** This is one person's version of how to teach Cursor. It is
+> not affiliated with, endorsed by, or sponsored by Cursor (Anysphere).
+> Cursor feature names belong to their owners; docs are cited, not copied.
+
+- Case-study repo: `hearthline-operator-console` (sibling directory / repo).
+- Curriculum: `steps/` (33 steps, 440 points, four-tab structure).
+- Sources: `bibliography.md`. Claim log: `fact-check.md`.
+- Terms: `glossary.md`. Diagrams: `diagrams/*.mmd`.
+- Versions & personas: `tracks.md`. Interactive site: `site/`.
+
+---
 
 ## Commands
 
@@ -16,18 +32,3 @@ Next.js 16 site for the cursor-workshop curriculum (`../steps/*.md`). Step pages
 
 - EN serves at bare paths; ES under `/es/*`. UI strings localize through `src/lib/i18n.ts`; ES steps live in `steps/es/*.md` with frontmatter byte-identical to EN except `title:`. ES supporting files (`glossary.es.md`, `bibliography.es.md`, `fact-check.es.md`) are termbase-checked siblings of the EN originals; the EN fact-check ledger is the authoritative verification record.
 - Structural headings (tab labels, exercise-kit headings) stay English inside ES source files; only the displayed label localizes, keeping parser and `#expected-result` anchors stable. Citations on ES pages resolve to `/es/bibliography#n`; glossary step links map to `/es/steps/...`.
-
-## Progress storage (v2)
-
-- Storage keys: `hearthline-progress-v2` (current), `hearthline-progress-v1` (legacy backup, read-only).
-- Schema: `{ version: 2, steps: { [slug]: { sections: { [sectionId]: { completed, revision, needsReview? } }, complete?, outcome?, legacy? } }, quiz?: { [slug]: { answers: number[], score, graded } }, lastVisited?: { slug, section } }`.
-- Progress file (Chrome/Edge): "Save to hearthline-progress.json" picks one file once; every later save overwrites it in place, and the remembered file loads back without a file chooser. The handle is stored locally in IndexedDB; no data leaves the browser.
-- Fallback (other browsers): Export progress JSON (fixed name `hearthline-progress-v2.json`) and Import progress JSON manually.
-- Migration: on first load, valid v1 `{ complete?, outcome? }` flags are copied into `legacy` per step; the v1 key is retained as a backup and never deleted by the site. Malformed, oversized, or invalid v1 data is rejected without writing v2; nothing is inferred as section completions.
-- Completion is one explicit whole-step self-report, tied to the step's Expected result section. Viewing a tab records only `lastVisited`; it never marks content complete. Points are counted once per step; legacy aggregate flags count as completion but do not mark sections learned. Each step ends with a 5-question self-graded quiz (no points impact; attempts stored under `quiz`).
-- Content revisions (section removal/rename): persisted progress for retired section IDs is reconciled against a published-history table, kept as `needsReview` history and never inferred as completion of a new section; obsolete `lastVisited` targets fall back to the first unfinished section. Strict imports use the same reconciliation so a legitimate older backup still imports, while fabricated unknown sections/fields remain rejected.
-- Import accepts versioned JSON only (`version: 2`), strict-shaped, at most 1 MB by UTF-8 byte length, with unknown slugs/sections/fields rejected before any state change. Importing requires an explicit confirmation; a failed write rolls back.
-- If stored v2 data becomes unreadable, the UI keeps the last valid snapshot, states that empty display is not a backup, and offers a raw recovery download of the exact original bytes; with no valid snapshot, the snapshot-export button is disabled.
-- Progress is local-only: no accounts, backend, or telemetry, and it is not proof of learning or mastery.
-- Same-browser/profile/origin resume is the Phase-2 MVP scope. Export JSON before clearing browser storage or moving to another origin; import it manually to restore compatible progress.
-- Reconsider account-based sync only after demonstrated cross-device needs and explicit cost/privacy approval. Across-session return rates alone do not establish cross-device demand; no telemetry is collected in Phase 2.

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #faf6ef;
+  --ink: #1c1917;
+  --cursor-orange: #f54e00;
+  --mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+body {
+  color: var(--ink);
+  background: var(--cream);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-mono-brand {
+  font-family: var(--mono);
+}
+
+/* Pastel module timeline dots */
+.module-foundations { background: #fde68a; }
+.module-building { background: #fed7aa; }
+.module-guardrails { background: #fecaca; }
+.module-fast-loop { background: #bfdbfe; }
+.module-debug-test { background: #c7d2fe; }
+.module-team-scale { background: #d8b4fe; }
+.module-bonus { background: #bbf7d0; }

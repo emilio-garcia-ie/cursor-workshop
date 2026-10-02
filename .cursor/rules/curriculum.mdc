@@ -1,0 +1,17 @@
+---
+description: Curriculum content standards for the Hearthline workshop
+globs: steps/**, glossary.md, bibliography.md, fact-check.md, tracks.md
+alwaysApply: false
+---
+
+# Curriculum rules
+
+- Every mechanism claim carries `[n]` resolving to `bibliography.md`. No
+  invented Cursor features: bibliography-or-it-doesn't-exist.
+- Step files follow `specs/step-schema.md` (tabs, closers, frontmatter).
+- Points sum to 440 across `steps/` (70/65/60/40/50/60/95). Re-verify on change.
+- `tracks.md` is the single source for version/persona sets; `site/` imports
+  it, never duplicates it.
+- The unofficial disclaimer stays on every site route.
+- Third-party claims carry `[third-party]` per `specs/citation-format.md`.
+- New claims get a `fact-check.md` row (claim/source/date/verdict).
