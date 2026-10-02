@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "How the Cursor workshop fits together",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1280,
+      650
+    ]
+  },
+  "components": [
+    {
+      "id": "curriculum",
+      "type": "backend",
+      "label": "Workshop curriculum",
+      "sublabel": "33 Markdown steps / 520 points",
+      "pos": [
+        50,
+        260
+      ],
+      "size": [
+        240,
+        84
+      ]
+    },
+    {
+      "id": "site",
+      "type": "frontend",
+      "label": "Interactive tutorial",
+      "sublabel": "Next.js / tabs / citations",
+      "pos": [
+        450,
+        260
+      ],
+      "size": [
+        240,
+        84
+      ]
+    },
+    {
+      "id": "practice",
+      "type": "backend",
+      "label": "Hearthline console",
+      "sublabel": "Learner copy / tickets / tests",
+      "pos": [
+        900,
+        260
+      ],
+      "size": [
+        260,
+        84
+      ]
+    },
+    {
+      "id": "evidence",
+      "type": "external",
+      "label": "Teaching references",
+      "sublabel": "Bibliography / glossary / SVGs",
+      "pos": [
+        50,
+        60
+      ],
+      "size": [
+        240,
+        84
+      ]
+    },
+    {
+      "id": "progress",
+      "type": "database",
+      "label": "Browser progress",
+      "sublabel": "localStorage v2 / JSON backup",
+      "pos": [
+        450,
+        490
+      ],
+      "size": [
+        240,
+        84
+      ]
+    },
+    {
+      "id": "harness",
+      "type": "security",
+      "label": "Cursor harness",
+      "sublabel": "Rules / skills / review agents",
+      "pos": [
+        900,
+        60
+      ],
+      "size": [
+        260,
+        84
+      ]
+    },
+    {
+      "id": "seed",
+      "type": "database",
+      "label": "In-memory app data",
+      "sublabel": "Seed resets on server restart",
+      "pos": [
+        900,
+        490
+      ],
+      "size": [
+        260,
+        84
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "content-render",
+      "from": "curriculum",
+      "to": "site",
+      "label": "parse + render",
+      "variant": "emphasis"
+    },
+    {
+      "id": "learner-handoff",
+      "from": "site",
+      "to": "practice",
+      "label": "learner follows exercises",
+      "variant": "emphasis"
+    },
+    {
+      "id": "reference-content",
+      "from": "evidence",
+      "to": "curriculum",
+      "label": "supports claims",
+      "labelDy": 30
+    },
+    {
+      "id": "save-progress",
+      "from": "site",
+      "to": "progress",
+      "label": "self-report + resume",
+      "labelDy": 30
+    },
+    {
+      "id": "guided-practice",
+      "from": "harness",
+      "to": "practice",
+      "label": "guides learner work",
+      "labelDy": 30
+    },
+    {
+      "id": "api-data",
+      "from": "practice",
+      "to": "seed",
+      "label": "4 GET APIs",
+      "labelDy": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Two apps, three folders",
+      "items": [
+        "cursor-workshop: curriculum + site",
+        "hearthline-operator-console: practice app",
+        "cursor-training: source reference + plan"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Not an automatic grading system",
+      "items": [
+        "Learner runs exercises in their own copy",
+        "No console-to-progress API connection",
+        "Three planted bugs remain in the starter"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Local state and clear limits",
+      "items": [
+        "Progress stays in this browser; export a backup",
+        "New MCP/hook registration is opt-in only",
+        "Production deployment remains on hold"
+      ]
+    }
+  ]
+}

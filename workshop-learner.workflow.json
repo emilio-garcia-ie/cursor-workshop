@@ -1,0 +1,31 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {"title": "Your journey through the workshop", "locale": "en", "quality_profile": "showcase"},
+  "lanes": [
+    {"id":"tutorial","label":"In the tutorial"},
+    {"id":"practice","label":"In your learner copy"},
+    {"id":"continuity","label":"Back in this browser"}
+  ],
+  "mainPath": ["choose","read","exercise","verify","record","resume"],
+  "nodes": [
+    {"id":"choose","lane":"tutorial","col":0,"type":"frontend","label":"Choose a track","sublabel":"Version + persona"},
+    {"id":"read","lane":"tutorial","col":1,"type":"frontend","label":"Read a step","sublabel":"Tabs + cited examples"},
+    {"id":"exercise","lane":"practice","col":2,"type":"backend","label":"Try it","width":120,"sublabel":"Cursor + Hearthline"},
+    {"id":"verify","lane":"practice","col":3,"type":"security","label":"Check it","width":120,"sublabel":"Tests + expected diff"},
+    {"id":"record","lane":"continuity","col":4,"type":"frontend","label":"Mark done","width":120,"sublabel":"Explicit self-report"},
+    {"id":"resume","lane":"continuity","col":5,"type":"database","label":"Continue later","sublabel":"Resume next work"}
+  ],
+  "edges": [
+    {"id":"open-selected","from":"choose","to":"read","label":"open","role":"main"},
+    {"id":"practice-handoff","from":"read","to":"exercise","label":"follow prompts","role":"main"},
+    {"id":"run-checks","from":"exercise","to":"verify","label":"run checks","role":"main"},
+    {"id":"manual-report","from":"verify","to":"record","label":"learner decides","role":"main"},
+    {"id":"persist","from":"record","to":"resume","label":"save locally","role":"main"}
+  ],
+  "cards": [
+    {"dot":"cyan","title":"Pick your depth","items":["Short: 10 steps / 215 points","Medium: 20 steps / 355 points","Long: 33 steps / 520 points"]},
+    {"dot":"emerald","title":"Practice, then reflect","items":["Use your copy, not the maintained starter","If checks fail, iterate before reporting success","Tab sets vary by step; viewing is not completion"]},
+    {"dot":"amber","title":"Keep your place","items":["v1 flags migrate without inventing learned sections","Export/import JSON for a manual backup","Content changes retain progress with review advice"]}
+  ]
+}

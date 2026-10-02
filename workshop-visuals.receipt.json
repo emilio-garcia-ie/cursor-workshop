@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "diagram_type": "architecture",
+      "output": "/Users/emilio/Documents/cursor-training/workshop-overview.html",
+      "specification_sha256": "aae4106d1d666b13b18a83dfec20e3a16c8d637a99c8eccdebf0b24b420631cd",
+      "artifact_sha256": "dadb50daff00bb04a118c4589b1e7c11258ee08c4d6d867f0e67635b07e74497",
+      "validation": "9/9 showcase, 0 errors, 0 warnings",
+      "browser_evidence": "passed",
+      "browser_receipt": "workshop-overview.visual-check.json",
+      "visual_review": "passed",
+      "visual_review_scope": "2048x1320 light and 1440x900 dark screenshots inspected; no clipping or route crossings observed",
+      "correction_rounds": 2
+    },
+    {
+      "diagram_type": "workflow",
+      "output": "/Users/emilio/Documents/cursor-training/workshop-learner.html",
+      "specification_sha256": "f5c78508dd22be824375246eac0443cbb5c1b93e6942bd9538a30b1675d94023",
+      "artifact_sha256": "c14a3575b09e1d14f05e0e50ba047a922f6f163c2cc0d4ce91681e5ecd166c8c",
+      "validation": "9/9 showcase, 0 errors, 0 warnings",
+      "browser_evidence": "passed",
+      "browser_receipt": "workshop-learner.visual-check.json",
+      "visual_review": "passed",
+      "visual_review_scope": "2048x1320 light and 1440x900 dark screenshots inspected; connected learner handoffs, legible main labels, no clipping observed",
+      "correction_rounds": 1
+    },
+    {
+      "diagram_type": "workflow",
+      "output": "/Users/emilio/Documents/cursor-training/workshop-refresh.html",
+      "specification_sha256": "12d423e3cd3b4abee32ecad8e268182ddfd4e80cba3298e4262c9a9a836aad20",
+      "artifact_sha256": "d3a89ae3ca51625e61c1a62a45001d4768141f0924ba7e9a75cf5fa1ce96724f",
+      "validation": "9/9 showcase, 0 errors, 0 warnings",
+      "browser_evidence": "passed",
+      "browser_receipt": "workshop-refresh.visual-check.json",
+      "visual_review": "passed",
+      "visual_review_scope": "2048x1320 light and 1440x900 dark screenshots inspected; approval boundary visible, no crossings or clipping observed",
+      "correction_rounds": 0
+    }
+  ],
+  "notes": [
+    "Repository-grounded conceptual views, not a production deployment certification.",
+    "Browser receipts measure all four desktop viewports and capture both themes at endpoint sizes.",
+    "Perceptual review is separate from automated browser evidence; exports were not manually exercised.",
+    "No application code, integrations, publishing or deployment changed."
+  ]
+}

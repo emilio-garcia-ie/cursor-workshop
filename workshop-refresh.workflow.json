@@ -1,0 +1,31 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {"title": "How the workshop stays current", "locale": "en", "quality_profile": "showcase"},
+  "lanes": [
+    {"id":"research","label":"Audit only by default"},
+    {"id":"approval","label":"Human decision"},
+    {"id":"apply","label":"Approved local changes"}
+  ],
+  "mainPath": ["request","discover","classify","approve","propagate","gate"],
+  "nodes": [
+    {"id":"request","lane":"research","col":0,"type":"external","label":"Request refresh","width":160,"sublabel":"Reusable skill"},
+    {"id":"discover","lane":"research","col":1,"type":"backend","label":"Discover","width":140,"sublabel":"Docs + changelog"},
+    {"id":"classify","lane":"research","col":2,"type":"backend","label":"Classify + cite","width":160,"sublabel":"Evidence + findings"},
+    {"id":"approve","lane":"approval","col":3,"type":"security","label":"Approve scope","width":160,"sublabel":"Report before edits"},
+    {"id":"propagate","lane":"apply","col":4,"type":"backend","label":"Update content","width":170,"sublabel":"Practice if needed"},
+    {"id":"gate","lane":"apply","col":5,"type":"security","label":"Verify + record","width":160,"sublabel":"Tests + ledger"}
+  ],
+  "edges": [
+    {"id":"invoke","from":"request","to":"discover","label":"audit","role":"main"},
+    {"id":"compare","from":"discover","to":"classify","label":"compare coverage","role":"main"},
+    {"id":"propose","from":"classify","to":"approve","label":"propose changes","role":"main"},
+    {"id":"authorize","from":"approve","to":"propagate","label":"approved only","role":"main"},
+    {"id":"verify-change","from":"propagate","to":"gate","label":"sync + test","role":"main"}
+  ],
+  "cards": [
+    {"dot":"cyan","title":"Evidence, not release hype","items":["Rolling 14 days from verified source content","New to coverage does not mean newly released","Failed URL is not proof of deprecation"]},
+    {"dot":"emerald","title":"Both repos evolve deliberately","items":["Deepen a step, add a footnote, or defer","Add case-study artifacts only for practice needs","Keep progress and starter bugs intact"]},
+    {"dot":"amber","title":"Completion is a recorded decision","items":["Stable finding IDs keep unfinished work visible","Sync points, citations, tracks and diagrams","Commit, push and deploy need separate approval"]}
+  ]
+}
